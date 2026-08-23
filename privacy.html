@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>プライバシーポリシー — SFレポート全件くん</title>
+<link rel="stylesheet" href="_style.css">
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="./">SFレポート全件くん</a>
+  <nav>
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="terms.html">利用規約</a>
+    <a href="support.html">サポート</a>
+  </nav>
+</header>
+<main>
+  <h1>プライバシーポリシー</h1>
+  <p class="lead">最終更新日: 2026年8月24日</p>
+
+  <section class="card">
+    <h2 style="margin-top:0">基本方針</h2>
+    <p>SFレポート全件くん(以下「本アドオン」)は、利用者のデータを<b>収集・保存・送信しません</b>。本アドオンの処理はすべて、利用者自身のGoogleアカウントとSalesforce組織の間で完結します。開発者は利用者のデータにアクセスする手段を持ちません。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">本アドオンがアクセスする情報と目的</h2>
+    <table>
+      <tr><th>アクセス対象</th><th>目的</th></tr>
+      <tr><td>Googleスプレッドシート(spreadsheets権限)</td><td>取得したレポートデータを利用者のシートに書き込むため</td></tr>
+      <tr><td>外部サービスへの接続(external_request権限)</td><td>利用者が初期設定で指定した、利用者自身のSalesforceドメインに接続するため。それ以外の外部サービスには一切接続しません</td></tr>
+      <tr><td>トリガー管理(scriptapp権限)</td><td>利用者が有効化した場合のみ、毎日の自動更新を予約するため</td></tr>
+      <tr><td>ダイアログ表示(container.ui権限)</td><td>設定画面・CSV取り込み画面を表示するため</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">保存される情報</h2>
+    <ul>
+      <li>Salesforce接続情報(接続先URL・コンシューマ鍵・コンシューマの秘密)およびライセンスキーは、Google Apps Scriptのユーザープロパティ(利用者のGoogleアカウントに紐づく非公開領域)にのみ保存されます。</li>
+      <li>これらの情報は開発者を含む第三者から参照できません。スプレッドシートを他者と共有しても共有されません。</li>
+      <li>アドオンをアンインストールし、保存済みの接続情報を削除したい場合は、サポートまでご連絡ください。削除手順をご案内します。</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">収集しないもの</h2>
+    <ul>
+      <li>Salesforceのデータ(取得されたレポートの内容は利用者のシートにのみ書き込まれます)</li>
+      <li>利用状況の分析データ(アクセス解析・トラッキングは行っていません)</li>
+      <li>個人情報(氏名・メールアドレス等を収集する仕組みはありません)</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Google APIの利用について</h2>
+    <p>本アドオンによるGoogle APIから受け取った情報の利用は、<a href="https://developers.google.com/terms/api-services-user-data-policy" rel="noopener" target="_blank">Google API Services User Data Policy</a>(限定使用の要件を含む)に準拠します。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">お問い合わせ</h2>
+    <p>本ポリシーに関するお問い合わせは<a href="support.html">サポートページ</a>記載の連絡先までお願いします。</p>
+  </section>
+</main>
+<footer>
+  <p>© 2026 SFレポート全件くん</p>
+</footer>
+</body>
+</html>

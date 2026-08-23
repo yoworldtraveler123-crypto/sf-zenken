@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>サポート — SFレポート全件くん</title>
+<link rel="stylesheet" href="_style.css">
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="./">SFレポート全件くん</a>
+  <nav>
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="terms.html">利用規約</a>
+    <a href="support.html">サポート</a>
+  </nav>
+</header>
+<main>
+  <h1>サポート</h1>
+
+  <section class="card">
+    <h2 style="margin-top:0">お問い合わせ</h2>
+    <p>メール: <code>yo.world.traveler.123+sfzenken@gmail.com</code></p>
+    <ul>
+      <li>対応はメール(テキスト)のみです。通常2営業日以内の返信を心がけています。</li>
+      <li>エラーの場合は、表示されたエラーメッセージをそのまま貼っていただけると解決が早くなります。</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">よくあるつまずき</h2>
+    <table>
+      <tr><th>症状</th><th>確認すること</th></tr>
+      <tr><td>「SalesforceのURLが正しくない可能性があります」</td><td>初期設定のURLが <code>https://〜.my.salesforce.com</code> 形式か(ブラウザのURLを貼っても自動補正されますが、組織名の部分が正しいか確認)</td></tr>
+      <tr><td>認証エラー(invalid_grant)</td><td>Salesforce側の接続アプリで「クライアントログイン情報フロー」が有効か・実行ユーザーが設定されているか</td></tr>
+      <tr><td>認証エラー(invalid_client)</td><td>コンシューマ鍵・秘密のコピーミス、または設定反映待ち(最大10分)</td></tr>
+      <tr><td>「表形式ではありません」</td><td>レポートを「表形式」に変更(集計形式・マトリックスは非対応)</td></tr>
+      <tr><td>「ID列が見つかりません」</td><td>レポートに「レコードID」列(取引先ID等)を追加</td></tr>
+    </table>
+  </section>
+</main>
+<footer>
+  <p>© 2026 SFレポート全件くん</p>
+</footer>
+</body>
+</html>
