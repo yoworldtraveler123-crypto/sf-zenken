@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support — ReportZen</title>
+<link rel="stylesheet" href="../_style.css">
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="./">ReportZen</a>
+  <nav>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="support.html">Support</a>
+    <a href="../support.html">日本語</a>
+  </nav>
+</header>
+<main>
+  <h1>Support</h1>
+
+  <section class="card">
+    <h2 style="margin-top:0">Contact</h2>
+    <p>Email: <code>yo.world.traveler.123+sfzenken@gmail.com</code></p>
+    <ul>
+      <li>Support is email (text) only. We usually reply within 2 business days.</li>
+      <li>For errors, please paste the exact error message — it speeds things up a lot.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Common issues</h2>
+    <table>
+      <tr><th>Symptom</th><th>Check</th></tr>
+      <tr><td>"The Salesforce URL looks wrong"</td><td>The setup URL should be in the form <code>https://xxxx.my.salesforce.com</code> (browser URLs are auto-corrected, but verify the org name)</td></tr>
+      <tr><td>Auth error (invalid_grant)</td><td>In your connected app, is the Client Credentials Flow enabled with a "run as" user set?</td></tr>
+      <tr><td>Auth error (invalid_client)</td><td>Consumer Key/Secret mistyped, or settings still propagating (up to 10 min)</td></tr>
+      <tr><td>"Not a tabular report"</td><td>Switch the report to tabular format (summary/matrix are not supported)</td></tr>
+      <tr><td>"No ID column found"</td><td>Add a record ID column (e.g. Account ID) to the report</td></tr>
+    </table>
+  </section>
+</main>
+<footer>
+  <p>© 2026 ReportZen</p>
+</footer>
+</body>
+</html>
