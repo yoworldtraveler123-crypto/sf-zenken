@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salesforce接続アプリの作成手順 — ReportZen</title>
+<style>
+  :root {
+    --bg: #F6F8F7; --surface: #FFFFFF; --ink: #1B2523; --muted: #5C6B67;
+    --border: #DCE4E1; --accent: #0B6B62; --accent-soft: #E3EFED;
+    --warn-bg: #FDF3E7; --warn-border: #E8C9A0; --warn-ink: #7A4B12;
+    --code-bg: #132420; --code-ink: #D7E6E1; --code-border: #24403A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Noto Sans JP", sans-serif;
+    line-height: 1.8; margin: 0; padding: 40px 16px 96px;
+  }
+  main { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 26px; margin: 0 0 8px; }
+  .lead { color: var(--muted); margin-bottom: 28px; }
+  section {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px 32px; margin-bottom: 24px;
+  }
+  h2 { font-size: 19px; margin: 0 0 16px; display: flex; align-items: center; gap: 10px; }
+  h3 { font-size: 16px; margin: 24px 0 8px; color: var(--accent); }
+  .stepnum {
+    background: var(--accent); color: #fff; font-size: 12px; font-weight: bold;
+    border-radius: 999px; padding: 3px 12px; white-space: nowrap;
+  }
+  ol, ul { padding-left: 24px; }
+  li { margin-bottom: 8px; }
+  .warn {
+    background: var(--warn-bg); border: 1px solid var(--warn-border); color: var(--warn-ink);
+    border-radius: 10px; padding: 10px 14px; margin: 10px 0; font-size: 14px;
+  }
+  .warn::before { content: "⚠️ "; }
+  .box {
+    background: var(--accent-soft); border-radius: 10px; padding: 14px 18px; margin: 12px 0;
+    font-size: 14.5px;
+  }
+  code.inline {
+    background: var(--accent-soft); border-radius: 6px; padding: 2px 7px;
+    font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 13.5px;
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--accent-soft); }
+  details {
+    border: 1px solid var(--border); border-radius: 10px; padding: 0; margin-top: 12px; overflow: hidden;
+  }
+  summary {
+    cursor: pointer; padding: 12px 18px; font-weight: bold; background: var(--accent-soft);
+  }
+  .codewrap { position: relative; }
+  pre.code {
+    background: var(--code-bg); color: var(--code-ink); border-top: 1px solid var(--code-border);
+    margin: 0; padding: 20px; overflow-x: auto; font-size: 12.5px; line-height: 1.6;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+  .btn-copy {
+    position: absolute; top: 10px; right: 10px; background: var(--accent); color: #fff;
+    border: none; border-radius: 8px; padding: 7px 14px; font-size: 13px; cursor: pointer;
+  }
+  .btn-copy:hover { opacity: .9; }
+  .meta { color: var(--muted); font-size: 13px; margin-top: 32px; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    section { border: none; padding: 12px 0; }
+    .btn-copy { display: none; }
+    details { border: none; }
+    details[open] summary { display: none; }
+  }
+</style>
+</head>
+<body>
+<header style="max-width:860px;margin:0 auto 28px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;font-family:inherit">
+  <a href="./" style="color:#0B6B62;font-weight:bold;font-size:18px;text-decoration:none">ReportZen</a>
+  <nav style="font-size:13.5px">
+    <a href="./" style="color:#5C6B67;text-decoration:none;margin-right:14px">製品について</a>
+    <a href="support.html" style="color:#5C6B67;text-decoration:none;margin-right:14px">サポート</a>
+    <a href="privacy.html" style="color:#5C6B67;text-decoration:none;margin-right:14px">プライバシーポリシー</a>
+    <a href="terms.html" style="color:#5C6B67;text-decoration:none">利用規約</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Salesforce 接続アプリ作成の依頼手順書</h1>
+  <p class="lead">Salesforceのレポートをスプレッドシートに自動取得するため、読み取り用の「外部クライアントアプリケーション」を1つ作成し、発行される鍵2つを依頼する担当者にお渡しいただきたい、という依頼です。<br>
+  作業時間: 約10分(+設定反映の待ち時間 最大10分)/ 必要権限: システム管理者</p>
+
+  <section>
+    <h2>セキュリティ上のポイント</h2>
+    <ul>
+      <li>OAuth範囲は「APIを使用してユーザーデータを管理 (api)」のみ。<b>外部サービスへの常時接続やデータ送信は発生しません</b>(スプレッドシート側から取得しに行くだけです)</li>
+      <li>アクセス範囲は「実行ユーザー」に指定した1ユーザーの閲覧権限と同一です。<b>担当者を実行ユーザーにすれば、担当者が画面で見られる以上のデータには一切アクセスできません</b></li>
+      <li>鍵はコードには書かれず、担当者のGoogleアカウント内の非公開領域にのみ保存されます(シートを共有しても第三者からは見えません)</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="stepnum">A</span>情シス側の作業(約10分)</h2>
+
+    <h3>A-1. 外部クライアントアプリケーションの新規作成</h3>
+    <ol>
+      <li>設定 → クイック検索「アプリケーションマネージャ」</li>
+      <li>右上の「<b>新規外部クライアントアプリケーション</b>」をクリック</li>
+    </ol>
+    <div class="warn">新しいUIには「新規接続アプリケーション」ボタンはありません。「新規外部クライアントアプリケーション」が後継で、設定項目は同等です。</div>
+    <ol start="3">
+      <li>基本情報を入力:
+        <ul>
+          <li>アプリケーション名: <code class="inline">SFレポート取得(マーケ)</code> など任意</li>
+          <li><b>API参照名: 半角英数字とアンダースコアのみ</b>(例: <code class="inline">SF_Report_Marketing</code>)</li>
+          <li>取引先責任者メール: 作業者のメール / 配信状態: ローカル</li>
+        </ul>
+      </li>
+    </ol>
+    <div class="warn">アプリ名を日本語にすると、自動入力されるAPI参照名が不正になり保存エラーになります。API参照名を手で英数字に直してください。</div>
+
+    <h3>A-2. OAuth設定</h3>
+    <ol start="4">
+      <li>「<b>OAuthを有効化</b>」にチェック</li>
+      <li>コールバックURL: <code class="inline">https://localhost</code>(使いませんが入力必須です)</li>
+      <li>OAuth範囲: 「<b>APIを使用してユーザーデータを管理 (api)</b>」だけを右側の「選択したOAuth範囲」へ移動。full や web は<b>追加しない</b></li>
+    </ol>
+    <div class="warn">コールバックURLの貼り付けが二重(<code class="inline">https://localhosthttps://localhost</code>)になる事故が起きやすいので確認してください。</div>
+
+    <h3>A-3. クライアントログイン情報フローの有効化(いちばん間違えやすい所)</h3>
+    <ol start="7">
+      <li>同じ画面を下へスクロール →「OAuthフローおよび外部クライアントアプリケーションの機能強化」の「<b>クライアントログイン情報フローを有効化</b>」にチェック</li>
+      <li>直下に出る「<b>(ユーザー名) として実行</b>」に、実行ユーザーの<b>Salesforceユーザー名</b>を入力</li>
+      <li>保存</li>
+    </ol>
+    <div class="warn"><b>メールアドレスではなく「ユーザー名」</b>です(見た目は似ていますが別物のことがあります)。設定 → ユーザー → 対象者の行の「ユーザー名」列の値をコピーして貼るのが確実です。</div>
+    <div class="warn">保存後に修正する場合は、必ず<b>既存アプリを開いて編集</b>してください。もう一度「新規」から作ると「already exists」エラーになります。既存アプリの一覧は「アプリケーションマネージャ」ではなく、クイック検索「<b>外部クライアントアプリケーションマネージャー</b>」にあります。</div>
+
+    <h3>A-4. 鍵の発行と受け渡し</h3>
+    <ol start="10">
+      <li>作成したアプリの「設定」タブ → OAuth設定 →「<b>コンシューマ鍵と秘密</b>」ボタン(操作者のメールに確認コードが届きます)</li>
+      <li>表示された「<b>コンシューマ鍵</b>」と「<b>コンシューマの秘密</b>」の2つを、社内の安全な方法(1Password共有など)で担当者へ。<b>チャットやメール平文での送付は避けてください</b></li>
+    </ol>
+
+    <h3>A-5. あわせて伝えていただきたい情報</h3>
+    <ol start="12">
+      <li>設定 → クイック検索「<b>私のドメイン</b>」→「現在の 私のドメイン の URL」の値(<code class="inline">xxxx.my.salesforce.com</code> 形式)</li>
+    </ol>
+    <div class="warn">ブラウザのアドレスバーに出る <code class="inline">xxxx.lightning.force.com</code> では動きません。必ず <code class="inline">my.salesforce.com</code> 形式のものをお願いします。</div>
+    <div class="box">情シス側の作業はここまでです。ありがとうございます。</div>
+  </section>
+
+  <section>
+    <h2><span class="stepnum">B</span>担当者側の作業(参考・約10分)</h2>
+    <ol>
+      <li>Googleスプレッドシートを新規作成 → 拡張機能 → Apps Script → 下のコードを全文貼り付けて保存</li>
+      <li>シートを再読み込み → メニュー「Salesforce」→「初期設定」で、A-5のURL・A-4の鍵と秘密を入力</li>
+      <li>「Salesforce」→「接続テスト」→「接続OK!」を確認</li>
+      <li>「レポート一覧シートを作る」→「SF設定」シートのA2に対象レポートのID(レポートを開いたURL内の <code class="inline">00O</code> で始まる英数字)を記入</li>
+      <li>「全レポート更新」→ 結果列に「✅ n件」が出れば完了。「毎朝の自動更新をON」で定時実行も可能</li>
+    </ol>
+    <p>対象レポートの条件: 形式が「表形式」で、列に「レコードID」(取引先ID等)が含まれていること。</p>
+
+    <details>
+      <summary>貼り付けるコード全文(クリックで開く)</summary>
+      <div class="codewrap">
+        <button type="button" class="btn-copy" id="copyCode">コードをコピー</button>
+        <pre class="code" id="codeBody">/**
+ * SFレポート全件くん v1 (商品版)
+ * Salesforceのレポートを2000件制限なしでスプレッドシートに自動取得する
+ *
+ * 特徴:
+ * - 鍵はコードに書かない(初期設定ダイアログで入力→ユーザーのプロパティ領域に保存)
+ * - 複数レポート対応(「SF設定」シートに1行=1レポート)
+ * - 定時自動更新(毎朝メニューからON/OFF)
+ * 仕組み: レポートをID列で昇順に並べ、「前回の最後のIDより後ろ」を2000件ずつ取り続ける
+ */
+
+const API_VER = &#x27;/services/data/v60.0&#x27;;
+const PAGE_SIZE = 2000;
+const MAX_PAGES = 500; // 安全弁(最大100万行)
+const CONFIG_SHEET = &#x27;SF設定&#x27;;
+
+/** シートを開いたときにメニューを追加 */
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu(&#x27;Salesforce&#x27;)
+    .addItem(&#x27;全レポート更新&#x27;, &#x27;refreshAll&#x27;)
+    .addSeparator()
+    .addItem(&#x27;初期設定(接続情報の登録)&#x27;, &#x27;setupCredentials&#x27;)
+    .addItem(&#x27;レポート一覧シートを作る&#x27;, &#x27;createConfigSheet&#x27;)
+    .addSeparator()
+    .addItem(&#x27;毎朝の自動更新をON&#x27;, &#x27;enableDailyTrigger&#x27;)
+    .addItem(&#x27;自動更新をOFF&#x27;, &#x27;disableDailyTrigger&#x27;)
+    .addItem(&#x27;接続テスト&#x27;, &#x27;testConnection&#x27;)
+    .addToUi();
+}
+
+/** ── 初期設定 ─────────────────────────────── */
+
+/** 接続情報をダイアログで聞いてユーザープロパティに保存(コードに鍵を残さない) */
+function setupCredentials() {
+  const ui = SpreadsheetApp.getUi();
+  const ask = function (title, hint, current) {
+    const res = ui.prompt(title, hint + (current ? &#x27;\n(現在: 設定済み。空のまま OK で変更しない)&#x27; : &#x27;&#x27;), ui.ButtonSet.OK_CANCEL);
+    if (res.getSelectedButton() !== ui.Button.OK) throw new Error(&#x27;初期設定を中断しました&#x27;);
+    return res.getResponseText().trim();
+  };
+  const props = PropertiesService.getUserProperties();
+  const cur = getCreds_(true);
+
+  const domain = ask(&#x27;1/3 SalesforceのURL&#x27;,
+    &#x27;例: https://xxxx.my.salesforce.com\n(xxxx.lightning.force.com の場合は my.salesforce.com に読み替え)&#x27;, cur.domain);
+  const id = ask(&#x27;2/3 コンシューマ鍵&#x27;, &#x27;接続アプリケーションの「コンシューマ鍵」を貼り付け&#x27;, cur.id);
+  const secret = ask(&#x27;3/3 コンシューマの秘密&#x27;, &#x27;接続アプリケーションの「コンシューマの秘密」を貼り付け&#x27;, cur.secret);
+
+  if (domain) props.setProperty(&#x27;SF_DOMAIN&#x27;, domain.replace(/\/+$/, &#x27;&#x27;));
+  if (id) props.setProperty(&#x27;SF_CLIENT_ID&#x27;, id);
+  if (secret) props.setProperty(&#x27;SF_CLIENT_SECRET&#x27;, secret);
+
+  ui.alert(&#x27;保存しました。「Salesforce → 接続テスト」で確認してください。\n※鍵はあなたのGoogleアカウントのプロパティ領域にだけ保存され、シートを共有しても他人には見えません。&#x27;);
+}
+
+function getCreds_(allowEmpty) {
+  const p = PropertiesService.getUserProperties();
+  const c = {
+    domain: p.getProperty(&#x27;SF_DOMAIN&#x27;) || &#x27;&#x27;,
+    id: p.getProperty(&#x27;SF_CLIENT_ID&#x27;) || &#x27;&#x27;,
+    secret: p.getProperty(&#x27;SF_CLIENT_SECRET&#x27;) || &#x27;&#x27;,
+  };
+  if (!allowEmpty &amp;&amp; (!c.domain || !c.id || !c.secret)) {
+    throw new Error(&#x27;接続情報が未設定です。メニュー「Salesforce → 初期設定」から登録してください。&#x27;);
+  }
+  return c;
+}
+
+/** レポート一覧シート(SF設定)の雛形を作る */
+function createConfigSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(CONFIG_SHEET);
+  if (!sh) sh = ss.insertSheet(CONFIG_SHEET);
+  if (sh.getLastRow() === 0) {
+    sh.getRange(1, 1, 1, 5).setValues([[
+      &#x27;レポートID(00Oで始まる)&#x27;, &#x27;出力シート名&#x27;, &#x27;ID列(通常は空=自動検出)&#x27;, &#x27;最終更新&#x27;, &#x27;結果&#x27;]]);
+    sh.getRange(2, 1, 1, 2).setValues([[&#x27;00Oxxxxxxxxxxxxxxx&#x27;, &#x27;SFレポート1&#x27;]]);
+    sh.setFrozenRows(1);
+    sh.autoResizeColumns(1, 5);
+  }
+  ss.setActiveSheet(sh);
+  SpreadsheetApp.getUi().alert(
+    &#x27;「&#x27; + CONFIG_SHEET + &#x27;」シートに取得したいレポートを1行ずつ書いてください。\n&#x27; +
+    &#x27;レポートIDは、Salesforceでレポートを開いたときのURLにある 00O で始まる英数字です。&#x27;);
+}
+
+/** ── 取得本体 ─────────────────────────────── */
+
+/** SF設定シートの全レポートを順に更新(メニュー/トリガー共用) */
+function refreshAll() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(CONFIG_SHEET);
+  if (!sh || sh.getLastRow() &lt; 2) {
+    throw new Error(&#x27;「&#x27; + CONFIG_SHEET + &#x27;」シートがありません。メニュー「Salesforce → レポート一覧シートを作る」から作成してください。&#x27;);
+  }
+  const creds = getCreds_(false);
+  const token = getToken_(creds);
+  const rows = sh.getRange(2, 1, sh.getLastRow() - 1, 3).getValues();
+  let ok = 0, ng = 0;
+
+  rows.forEach(function (row, i) {
+    const reportId = String(row[0]).trim();
+    const sheetName = String(row[1]).trim() || (&#x27;SFレポート&#x27; + (i + 1));
+    const idColumn = String(row[2]).trim();
+    if (!reportId || reportId.indexOf(&#x27;00O&#x27;) !== 0) return; // 雛形行や空行はスキップ
+
+    const cell = sh.getRange(i + 2, 4, 1, 2);
+    try {
+      const n = fetchReport_(creds, token, reportId, sheetName, idColumn);
+      cell.setValues([[new Date(), &#x27;✅ &#x27; + n + &#x27;件&#x27;]]);
+      ok++;
+    } catch (e) {
+      cell.setValues([[new Date(), &#x27;❌ &#x27; + String(e.message).slice(0, 200)]]);
+      ng++;
+    }
+  });
+  ss.toast(&#x27;更新完了: 成功&#x27; + ok + &#x27;件 / 失敗&#x27; + ng + &#x27;件&#x27;, &#x27;Salesforce&#x27;, 10);
+}
+
+/** 1レポートを全件取得してシートに書く。取得件数を返す */
+function fetchReport_(creds, token, reportId, sheetName, idColumnPref) {
+  // 1) レポートの定義を取得
+  const desc = sfGet_(creds, token, API_VER + &#x27;/analytics/reports/&#x27; + reportId + &#x27;/describe&#x27;);
+  const meta = desc.reportMetadata;
+  if (meta.reportFormat &amp;&amp; meta.reportFormat !== &#x27;TABULAR&#x27;) {
+    throw new Error(&#x27;表形式ではありません(形式: &#x27; + meta.reportFormat + &#x27;)。レポート編集画面で「表形式」に変更してください。&#x27;);
+  }
+  const cols = meta.detailColumns;
+  const colInfo = desc.reportExtendedMetadata.detailColumnInfo;
+
+  // 2) ページング用のID列(指定 or 自動検出)
+  let idCol = idColumnPref;
+  if (!idCol) {
+    idCol = cols.filter(function (c) {
+      return /(^|_|\.)ID$/i.test(c) || /\.Id$/.test(c);
+    })[0];
+  }
+  if (!idCol || cols.indexOf(idCol) === -1) {
+    const candidates = cols.map(function (c) {
+      return c + &#x27; (&#x27; + (colInfo[c] ? colInfo[c].label : &#x27;?&#x27;) + &#x27;)&#x27;;
+    }).join(&#x27; / &#x27;);
+    throw new Error(&#x27;ID列が見つかりません。レポートに「レコードID」列を足すか、SF設定のID列に次から1つ指定: &#x27; + candidates);
+  }
+  const idIdx = cols.indexOf(idCol);
+
+  // 3) ID昇順に固定して2000件ずつ取り続ける
+  meta.sortBy = [{ sortColumn: idCol, sortOrder: &#x27;Asc&#x27; }];
+  const baseFilters = meta.reportFilters || [];
+  const baseLogic = meta.reportBooleanFilter || null;
+  const rows = [];
+  let lastId = null;
+
+  for (let page = 0; page &lt; MAX_PAGES; page++) {
+    const m = JSON.parse(JSON.stringify(meta));
+    if (lastId) {
+      m.reportFilters = baseFilters.concat([{ column: idCol, operator: &#x27;greaterThan&#x27;, value: lastId }]);
+      if (baseLogic) {
+        m.reportBooleanFilter = &#x27;(&#x27; + baseLogic + &#x27;) AND &#x27; + m.reportFilters.length;
+      }
+    }
+    const result = sfPost_(creds, token,
+      API_VER + &#x27;/analytics/reports/&#x27; + reportId + &#x27;?includeDetails=true&#x27;,
+      { reportMetadata: m });
+
+    const fact = result.factMap[&#x27;T!T&#x27;];
+    if (!fact) throw new Error(&#x27;詳細行が取得できません。レポート形式が「表形式」か確認してください。&#x27;);
+    const pageRows = (fact.rows || []).map(function (r) {
+      return r.dataCells.map(function (c) { return c.label; });
+    });
+    if (pageRows.length === 0) break;
+    rows.push.apply(rows, pageRows);
+
+    const lastCell = fact.rows[fact.rows.length - 1].dataCells[idIdx];
+    const v = lastCell.value;
+    lastId = (v &amp;&amp; v.id) ? v.id : String(v);
+    if (pageRows.length &lt; PAGE_SIZE) break;
+  }
+
+  // 4) シートに書き出し
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const out = ss.getSheetByName(sheetName) || ss.insertSheet(sheetName);
+  out.clearContents();
+  const header = cols.map(function (c) { return colInfo[c] ? colInfo[c].label : c; });
+  out.getRange(1, 1, 1, header.length).setValues([header]);
+  if (rows.length &gt; 0) {
+    out.getRange(2, 1, rows.length, header.length).setValues(rows);
+  }
+  return rows.length;
+}
+
+/** ── 自動更新トリガー ─────────────────────── */
+
+function enableDailyTrigger() {
+  disableDailyTrigger();
+  ScriptApp.newTrigger(&#x27;refreshAll&#x27;).timeBased().everyDays(1).atHour(6).create();
+  SpreadsheetApp.getUi().alert(&#x27;毎朝6〜7時ごろに全レポートを自動更新します。&#x27;);
+}
+
+function disableDailyTrigger() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === &#x27;refreshAll&#x27;) ScriptApp.deleteTrigger(t);
+  });
+}
+
+/** ── 接続まわり ───────────────────────────── */
+
+function testConnection() {
+  const creds = getCreds_(false);
+  const token = getToken_(creds);
+  const me = sfGet_(creds, token, API_VER + &#x27;/&#x27;);
+  SpreadsheetApp.getUi().alert(&#x27;接続OK! Salesforceに繋がりました。&#x27;);
+}
+
+/** 認証: クライアントログイン情報フローでアクセストークンを取る */
+function getToken_(creds) {
+  const res = UrlFetchApp.fetch(creds.domain + &#x27;/services/oauth2/token&#x27;, {
+    method: &#x27;post&#x27;,
+    payload: {
+      grant_type: &#x27;client_credentials&#x27;,
+      client_id: creds.id,
+      client_secret: creds.secret,
+    },
+    muteHttpExceptions: true,
+  });
+  const body = JSON.parse(res.getContentText());
+  if (!body.access_token) {
+    throw new Error(&#x27;Salesforce認証に失敗しました。初期設定のURL・鍵・接続アプリの設定を確認してください。詳細: &#x27; + res.getContentText());
+  }
+  return body.access_token;
+}
+
+function sfGet_(creds, token, path) { return sfFetch_(creds, token, path, null); }
+function sfPost_(creds, token, path, payload) { return sfFetch_(creds, token, path, payload); }
+
+function sfFetch_(creds, token, path, payload) {
+  const options = {
+    method: payload ? &#x27;post&#x27; : &#x27;get&#x27;,
+    headers: { Authorization: &#x27;Bearer &#x27; + token },
+    muteHttpExceptions: true,
+  };
+  if (payload) {
+    options.contentType = &#x27;application/json&#x27;;
+    options.payload = JSON.stringify(payload);
+  }
+  const res = UrlFetchApp.fetch(creds.domain + path, options);
+  if (res.getResponseCode() &gt;= 300) {
+    throw new Error(&#x27;Salesforce APIエラー(&#x27; + res.getResponseCode() + &#x27;): &#x27; + res.getContentText());
+  }
+  return JSON.parse(res.getContentText());
+}
+</pre>
+      </div>
+    </details>
+  </section>
+
+  <section>
+    <h2><span class="stepnum">C</span>エラーが出たときの早見表</h2>
+    <table>
+      <tr><th>エラー表示</th><th>原因</th><th>直し方</th></tr>
+      <tr><td>API参照名に使用できるのは英数字のみ…</td><td>アプリ名が日本語でAPI参照名に自動流用された</td><td>API参照名を手で英数字に(A-1)</td></tr>
+      <tr><td>有効な実行ユーザーを入力してください</td><td>実行ユーザーが未入力/メールアドレスを入れた</td><td>「ユーザー名」を入れる(A-3)</td></tr>
+      <tr><td>already exists</td><td>既存アプリがあるのに「新規」から再作成した</td><td>既存アプリを開いて編集(A-3)</td></tr>
+      <tr><td>SyntaxError: Unexpected token '&lt;' … is not valid JSON</td><td>URLが lightning.force.com 形式</td><td>my.salesforce.com 形式に(A-5)</td></tr>
+      <tr><td>invalid_grant: no client credentials user enabled</td><td>フロー有効化のチェックまたは実行ユーザーが未保存</td><td>A-3をやり直して保存</td></tr>
+      <tr><td>認証エラーが直らない</td><td>設定反映前(最大10分)</td><td>数分待って再実行</td></tr>
+    </table>
+  </section>
+
+  <p class="meta">作成: 2026-08-23 / この手順はSalesforce Developer Editionでの実機検証済みです。</p>
+</main>
+<script>
+  document.getElementById('copyCode').addEventListener('click', function () {
+    var text = document.getElementById('codeBody').textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      var b = document.getElementById('copyCode');
+      b.textContent = '✅ コピーしました';
+      setTimeout(function () { b.textContent = 'コードをコピー'; }, 2000);
+    });
+  });
+</script>
+</body>
+</html>
