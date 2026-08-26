@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salesforce Connected App Setup — ReportZen</title>
+<meta name="description" content="How to create the read-only Salesforce connected app that ReportZen uses. A step-by-step guide you can hand to your IT team.">
+<link rel="stylesheet" href="../_style.css">
+<style>
+  .stepnum {
+    background: var(--accent); color: #fff; font-size: 12px; font-weight: bold;
+    border-radius: 999px; padding: 3px 12px; white-space: nowrap; margin-right: 8px;
+  }
+  h3 { font-size: 15.5px; margin: 22px 0 8px; color: var(--accent); }
+  .warn {
+    background: #FDF3E7; border: 1px solid #E8C9A0; color: #7A4B12;
+    border-radius: 10px; padding: 10px 14px; margin: 10px 0; font-size: 14px;
+  }
+  .warn::before { content: "⚠️ "; }
+  .box { background: var(--accent-soft); border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14.5px; }
+  ol { padding-left: 24px; }
+  ol li { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="./">ReportZen</a>
+  <nav>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="support.html">Support</a>
+    <a href="../setup.html">日本語</a>
+  </nav>
+</header>
+<main>
+  <h1>Salesforce Connected App Setup</h1>
+  <p class="lead">To fetch reports via the API, ReportZen needs one read-only "External Client Application" in your Salesforce org. This page is written so you can hand it directly to your IT team or Salesforce administrator.<br>
+  Admin time: about 10 minutes (plus up to 10 minutes for settings to propagate) / Required permission: System Administrator</p>
+
+  <section class="card">
+    <h2 style="margin-top:0">Security notes for your administrator</h2>
+    <ul>
+      <li>The only OAuth scope requested is <b>"Manage user data via APIs (api)"</b>. <b>There is no persistent connection to, and no data transfer to, any external service</b> — the user's own spreadsheet pulls data directly from your org.</li>
+      <li>Access is identical to the view permission of the single user set as the <b>"Run As" user</b>. If you set the requesting user there, <b>the app can never see more than that user already sees on screen</b>.</li>
+      <li>The credentials are never written into code. They are stored only in the user's private Google account property store — invisible to anyone the spreadsheet is shared with, and to the developer.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0"><span class="stepnum">A</span>Administrator steps (about 10 min)</h2>
+
+    <h3>A-1. Create a new External Client Application</h3>
+    <ol>
+      <li>Setup → Quick Find: <b>App Manager</b></li>
+      <li>Click <b>"New External Client App"</b> in the top right</li>
+    </ol>
+    <div class="warn">Newer Salesforce UIs no longer show the classic "New Connected App" button. "New External Client App" is its successor with equivalent settings.</div>
+    <ol start="3">
+      <li>Fill in the basics:
+        <ul>
+          <li>App name: anything, e.g. <code>SF_Report_Export</code></li>
+          <li><b>API name: letters, digits and underscores only</b></li>
+          <li>Contact email: the administrator's email / Distribution state: Local</li>
+        </ul>
+      </li>
+    </ol>
+    <div class="warn">If the app name contains non-ASCII characters, the auto-filled API name becomes invalid and saving fails. Correct the API name by hand.</div>
+
+    <h3>A-2. OAuth settings</h3>
+    <ol start="4">
+      <li>Check <b>"Enable OAuth"</b></li>
+      <li>Callback URL: <code>https://localhost</code> (not used, but the field is required)</li>
+      <li>OAuth scopes: move only <b>"Manage user data via APIs (api)"</b> to the selected list. Do <b>not</b> add <code>full</code> or <code>web</code></li>
+    </ol>
+    <div class="warn">Double-check the callback URL — accidental double pastes (<code>https://localhosthttps://localhost</code>) are a common mistake.</div>
+
+    <h3>A-3. Enable the Client Credentials Flow (the step most often missed)</h3>
+    <ol start="7">
+      <li>Scroll down on the same screen → under "OAuth flows and external client app enhancements", check <b>"Enable Client Credentials Flow"</b></li>
+      <li>In the <b>"Run As"</b> field that appears, enter the <b>Salesforce username</b> of the user the app should run as</li>
+      <li>Save</li>
+    </ol>
+    <div class="warn"><b>The "Run As" value is the Salesforce username, not the email address</b> (they can look identical but differ). The safe way: Setup → Users → copy the value from the "Username" column.</div>
+    <div class="warn">To fix anything after saving, always <b>edit the existing app</b>. Creating it again via "New" fails with an "already exists" error. Existing apps are listed under Quick Find: <b>"External Client App Manager"</b>, not under App Manager.</div>
+
+    <h3>A-4. Issue and hand over the credentials</h3>
+    <ol start="10">
+      <li>Open the created app's "Settings" tab → OAuth settings → click <b>"Consumer Key and Secret"</b> (a verification code is sent to the operator's email)</li>
+      <li>Hand the displayed <b>Consumer Key</b> and <b>Consumer Secret</b> to the requesting user through a secure channel (a password manager share, etc.). <b>Avoid plain chat or email</b></li>
+    </ol>
+
+    <h3>A-5. One more thing to pass along</h3>
+    <ol start="12">
+      <li>Setup → Quick Find: <b>"My Domain"</b> → copy the "Current My Domain URL" value (the <code>xxxx.my.salesforce.com</code> form)</li>
+    </ol>
+    <div class="warn">The <code>xxxx.lightning.force.com</code> address from the browser bar does not work for API calls. ReportZen auto-corrects common variants during setup, but the <code>my.salesforce.com</code> form is the reliable one.</div>
+    <div class="box">That's everything on the administrator side. Thank you!</div>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0"><span class="stepnum">B</span>User steps in the add-on (about 5 min)</h2>
+    <ol>
+      <li>Open a Google Sheet → <b>Extensions → ReportZen → Setup (connection info)</b>, and enter the URL from A-5 and the key/secret from A-4</li>
+      <li>Run <b>Test connection</b> and confirm it succeeds</li>
+      <li>Run <b>Create report list sheet</b> → in the created sheet, enter the target report ID (the string starting with <code>00O</code> in the report's URL)</li>
+      <li>Run <b>Refresh all reports</b> → the Result column shows ✅ with the row count. The free plan fetches up to 2,000 rows; <b>Enter license key (unlock full export)</b> removes the cap and unlocks <b>Enable daily auto refresh</b></li>
+    </ol>
+    <p>Report requirements: the report format must be <b>tabular</b>, and the report must include a record ID column (e.g. Account ID).</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0"><span class="stepnum">C</span>Error quick reference</h2>
+    <table>
+      <tr><th>Error</th><th>Cause</th><th>Fix</th></tr>
+      <tr><td>"The API name can only contain…"</td><td>Non-ASCII app name auto-filled the API name</td><td>Correct the API name by hand (A-1)</td></tr>
+      <tr><td>"Enter a valid Run As user"</td><td>Run As is empty, or an email address was entered</td><td>Enter the <b>username</b> (A-3)</td></tr>
+      <tr><td>"already exists"</td><td>Recreated via "New" instead of editing</td><td>Edit the existing app (A-3)</td></tr>
+      <tr><td>SyntaxError: Unexpected token '&lt;' … is not valid JSON</td><td>URL is in the lightning.force.com form</td><td>Use the my.salesforce.com form (A-5)</td></tr>
+      <tr><td>invalid_grant: no client credentials user enabled</td><td>Flow checkbox or Run As user not saved</td><td>Redo A-3 and save</td></tr>
+      <tr><td>Authentication keeps failing</td><td>Settings not yet propagated (up to 10 min)</td><td>Wait a few minutes and retry</td></tr>
+    </table>
+  </section>
+
+  <p class="lead" style="font-size:13px">These steps were verified end-to-end on a Salesforce Developer Edition org. Questions: see <a href="support.html">Support</a>.</p>
+</main>
+</body>
+</html>
