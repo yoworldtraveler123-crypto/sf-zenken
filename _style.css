@@ -32,3 +32,18 @@ th { background: var(--accent-soft); }
 footer { max-width: 780px; margin: 40px auto 0; color: var(--muted); font-size: 12.5px; }
 footer a { color: var(--muted); }
 code { background: var(--accent-soft); border-radius: 5px; padding: 1px 6px; font-size: 13px; }
+
+/* 購入導線 */
+.buy { background: var(--accent); color: #fff; border: 1px solid var(--accent); border-radius: 14px; padding: 26px 30px; margin-bottom: 22px; }
+.buy h2 { color: #fff; margin-top: 0; }
+.buy .price { font-size: 30px; font-weight: bold; letter-spacing: .02em; }
+.buy .price small { font-size: 14px; font-weight: normal; opacity: .85; margin-left: 8px; }
+.buy ul { margin: 10px 0 18px; }
+.buy li { margin-bottom: 4px; }
+.buy .note { font-size: 13px; opacity: .85; margin: 12px 0 0; }
+.btn {
+  display: inline-block; background: #fff; color: var(--accent); font-weight: bold;
+  text-decoration: none; border-radius: 999px; padding: 13px 34px; font-size: 16px;
+}
+.btn:hover { opacity: .88; }
+.btn-sub { display: inline-block; color: #fff; text-decoration: underline; font-size: 13.5px; margin-left: 16px; }

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ReportZen — Salesforceレポートをスプレッドシートに全件取得</title>
-<meta name="description" content="Salesforceのレポートを2,000件の制限なしでGoogleスプレッドシートに自動取得するアドオン。データはあなたの環境の外に出ません。">
+<title>ReportZen — Salesforceレポートの2,000件制限をスプレッドシートで解除</title>
+<meta name="description" content="Googleスプレッドシートの Salesforceコネクタが2,000行で止まる問題を解決する買い切りツール。全件を自動取得し、毎朝の自動更新にも対応。データはあなたの環境の外に出ません。">
 <link rel="stylesheet" href="_style.css">
 </head>
 <body>
@@ -20,7 +20,37 @@
 </header>
 <main>
   <h1>Salesforceのレポートを、<br>2,000件の制限なしでスプレッドシートへ。</h1>
-  <p class="lead">ReportZen(レポートゼン・日本語愛称「全件くん」)は、Salesforceのレポートを Google スプレッドシートに取得するアドオンです。純正コネクタの2,000行制限を自動ページングで越え、毎朝の自動更新にも対応します。</p>
+  <p class="lead">ReportZen(レポートゼン)は、Salesforceのレポートを Google スプレッドシートに取得するツールです。純正コネクタの2,000行制限を自動ページングで越え、毎朝の自動更新にも対応します。買い切りで、月額はかかりません。</p>
+
+  <section class="buy">
+    <h2>今すぐ入手する</h2>
+    <p class="price">10,000円 <small>買い切り・月額なし</small></p>
+    <ul>
+      <li>ツール一式(API連携版 / CSVドロップ版 / 購読メール版)</li>
+      <li>セットアップ手順書 + 情シスにそのまま渡せる依頼書</li>
+      <li>購入後2週間のテキスト質問対応</li>
+    </ul>
+    <a class="btn" href="https://coconala.com/services/4370845" target="_blank" rel="noopener">ココナラで購入する</a>
+    <span class="btn-sub">オプション:セットアップ同伴 +5,000円</span>
+    <p class="note">ココナラ経由での販売です(決済・購入者保護はココナラの仕組みを利用します)。購入後、ツール一式をその場でお渡しします。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">2,000行の壁とは</h2>
+    <p>2026年6月頃から、Googleスプレッドシートの純正「Salesforceコネクタ」でレポートを取り込むと、<b>2,000行で打ち切られる</b>ようになりました。これはSalesforce側のレポートAPIの仕様(1回の実行につき2,000行)に由来するもので、<b>Googleの有料プランに変えても解除されません</b>。</p>
+    <p>回避には、レポートを条件で分割して何本もコピーするか、レポートを経由せず元データに直接問い合わせる必要があります。ReportZenは後者を自動で行い、2,000件ずつページを繰って全件を取得します。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">他の解決策との比較</h2>
+    <table>
+      <tr><th>解決策</th><th>費用</th><th>注意点</th></tr>
+      <tr><td>Google純正のSalesforceコネクタ</td><td>無料</td><td>2,000行で止まる。解除する有料プランは存在しない</td></tr>
+      <tr><td>海外製の連携ツール(G-Connector、Coefficient等)</td><td>継続課金<br>月1,250〜4,500円/人</td><td>英語UI。<b>会社が外部アプリの接続を禁止していると導入自体ができない</b></td></tr>
+      <tr><td>レポートを分割してコピー</td><td>無料</td><td>件数が増えるたびに手作業が増える</td></tr>
+      <tr><td><b>ReportZen</b></td><td><b>10,000円 買い切り</b></td><td>日本語。CSVドロップ版は<b>権限が一切不要</b>で当日から使える</td></tr>
+    </table>
+  </section>
 
   <section class="card">
     <h2 style="margin-top:0">できること</h2>
@@ -30,6 +60,7 @@
       <li><span class="badge">ライセンス</span>レポートの<b>全件取得</b>(2,000件ずつ自動でページを繰り、上限なし)</li>
       <li><span class="badge">ライセンス</span>毎朝の自動更新・複数レポートの一括管理</li>
     </ul>
+    <p class="lead">実測で2,200件超の全件取得を確認済み。5万件規模を想定した連続取得テスト(23ページ分)も件数ズレなしで通過しています。</p>
   </section>
 
   <section class="card">
@@ -43,8 +74,20 @@
   </section>
 
   <section class="card">
-    <h2 style="margin-top:0">入手方法</h2>
-    <p>Google Workspace Marketplace で公開準備中です。ライセンスの販売開始・提供状況は本ページでお知らせします。</p>
+    <h2 style="margin-top:0">動作の前提</h2>
+    <ul>
+      <li>Googleスプレッドシートが使えること(無料アカウントでも可)</li>
+      <li>API連携版は、Salesforce管理者の協力が1回だけ必要です(<a href="setup.html">手順はこちら</a>。情シスにそのまま渡せる依頼書を同梱)</li>
+      <li>CSVドロップ版は権限不要です</li>
+      <li>レポートは「表形式」であること(集計形式・マトリックスは非対応)</li>
+    </ul>
+  </section>
+
+  <section class="buy">
+    <h2>入手する</h2>
+    <p class="price">10,000円 <small>買い切り・月額なし</small></p>
+    <a class="btn" href="https://coconala.com/services/4370845" target="_blank" rel="noopener">ココナラで購入する</a>
+    <p class="note">ご不明な点は<a href="support.html" style="color:#fff">サポート</a>からメールでお問い合わせください。Google Workspace Marketplace 版は現在審査中です。</p>
   </section>
 </main>
 <footer>
