@@ -18,7 +18,7 @@
 </header>
 <main>
   <h1>Privacy Policy</h1>
-  <p class="lead">Last updated: August 24, 2026</p>
+  <p class="lead">Last updated: September 8, 2026</p>
 
   <section class="card">
     <h2 style="margin-top:0">Our principle</h2>
@@ -51,6 +51,30 @@
       <li>Salesforce data (fetched reports are written only to your spreadsheet)</li>
       <li>Usage analytics (no tracking of any kind)</li>
       <li>Personal information (there is no mechanism to collect names, emails, etc.)</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Data Transfer</h2>
+    <p>ReportZen does <strong>not share, transfer, or sell</strong> any information received from Google APIs (raw, aggregated, or anonymized) to any third party. The only destination data is sent to is the user's own Salesforce org, which the user specifies during setup. There is no developer-operated server, and no data is sent to the developer. Data is never provided to advertisers, data brokers, or for lending/creditworthiness purposes.</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Data Protection</h2>
+    <ul>
+      <li>The Add-on runs on Google Apps Script and all processing happens inside the user's own Google account. The developer operates no server and no database.</li>
+      <li>All communication with Salesforce uses HTTPS (TLS).</li>
+      <li>Connection details and the license key are stored only in Apps Script User Properties, a private store managed by Google and tied to the user's own Google account. No third party, including the developer, can read them, and they are not shared even when the spreadsheet is shared.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Data Retention &amp; Deletion</h2>
+    <ul>
+      <li><strong>The developer retains no user data at all</strong> (retention period is zero). Fetched report data is written only to the user's own spreadsheet and stays under the user's control.</li>
+      <li>Connection details and the license key remain in the user's own User Properties until the user removes them.</li>
+      <li><strong>How to delete</strong>: open Extensions &rarr; ReportZen &rarr; Setup and save empty values to overwrite and clear them. Uninstalling the Add-on makes those User Properties inaccessible, per Google's platform behaviour. For a guided removal, contact <a href="support.html">support</a>.</li>
+      <li>To remove fetched report data, delete the destination sheet. No copy exists on the developer side.</li>
     </ul>
   </section>
 
