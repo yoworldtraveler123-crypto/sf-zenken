@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salesforceのレポートが2,000件(2,000行)で切れる理由と、全件を取る方法 — ReportZen</title>
+<meta name="description" content="Salesforceのレポートが2,000行で切れるのは、画面表示とレポートAPIが先頭2,000行までしか返さないためです。「このレポートには、最大表示数 (最大 2,000 行) を超える結果があります」と出たときに全件を取る方法を、無料の標準機能から順にまとめました。">
+<link rel="canonical" href="https://getreportzen.com/faq/2000-row-limit.html">
+<link rel="alternate" hreflang="ja" href="https://getreportzen.com/faq/2000-row-limit.html">
+<link rel="alternate" hreflang="en" href="https://getreportzen.com/en/faq/2000-row-limit.html">
+<link rel="stylesheet" href="../_style.css">
+<style>
+  .answer { background: var(--surface); border: 1px solid var(--border); border-left: 5px solid var(--accent); border-radius: 10px; padding: 18px 22px; margin: 18px 0 26px; }
+  .meta { color: var(--muted); font-size: 13px; margin: 0 0 6px; }
+  .buy a:not(.btn) { color: #fff; }
+  .src { font-size: 13px; color: var(--muted); }
+  .src li { word-break: break-all; }
+  .tbl { overflow-x: auto; }
+  sup a { text-decoration: none; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "inLanguage": "ja",
+  "dateModified": "2026-09-19",
+  "author": { "@type": "Organization", "name": "Okamoto Tools" },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Salesforceのレポートが2,000行で切れるのはなぜですか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "レポートの実行画面は2,000行までしか表示せず、外部ツールがレポートを読むときに使うレポートAPI(Reports and Dashboards REST API)も先頭2,000行までしか返さない仕様だからです。Salesforce側のデータが欠けているわけではありません。" }
+    },
+    {
+      "@type": "Question",
+      "name": "「このレポートには、最大表示数 (最大 2,000 行) を超える結果があります」と出たら、どうすれば全件を見られますか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "レポートを「エクスポート」し、形式で「詳細のみ」のCSVかXLSを選ぶと、行数の上限なしで全件がファイルに出ます(10分でタイムアウト)。XLSXは10万行までです。2026年7月以降、有償組織ではエクスポートのたびにステップアップ認証(追加のMFA)を求められることがあります。" }
+    },
+    {
+      "@type": "Question",
+      "name": "無料で2,000行を超えるレポートを定期的に取る方法はありますか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "レポート購読のファイル添付なら1万5千行・30列・3MBまで定期的にメールで受け取れます(Lightningのみ、管理者の有効化が必要、ベータ扱い)。1万5千行を超える場合はData Loaderのコマンドライン版、Salesforce CLI、REST APIやBulk API 2.0を呼ぶ自作スクリプトなど、SOQLを書く方法になります。" }
+    },
+    {
+      "@type": "Question",
+      "name": "Googleスプレッドシートの純正Salesforce Connectorも2,000行で止まりますか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Googleのヘルプには行数の上限は書かれていません。ただし、2,000行を超えるレポートを取り込むとヘッダーだけになる、失敗するという利用者の報告が2022年から続いており、2026年7月にはステップアップ認証で失敗するという報告も出ています。" }
+    },
+    {
+      "@type": "Question",
+      "name": "ReportZenは何行まで取得できますか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "ReportZenはレポートAPIで2,000件ずつ区切って繰り返し取得するため、行数の上限は設けていません。2026年9月17日にSalesforce Developer Editionで2,354件のレポートを全件取得できました。ただしDeveloper Editionは容量の都合で約2,500件が天井のため、上限を測った結果ではありません。スプレッドシート側には1ファイル1,000万セルの上限があります。" }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="../">ReportZen</a>
+  <nav>
+    <a href="../setup.html">Salesforce接続の手順</a>
+    <a href="../privacy.html">プライバシーポリシー</a>
+    <a href="../terms.html">利用規約</a>
+    <a href="../support.html">サポート</a>
+    <a href="../en/faq/2000-row-limit.html">English</a>
+  </nav>
+</header>
+<main>
+  <p class="meta">よくある質問 / 最終更新 2026-09-19 / 作成 Okamoto Tools</p>
+  <h1>Salesforceのレポートが2,000件(2,000行)で切れる理由と、全件を取る方法</h1>
+
+  <div class="answer">
+    <p style="margin:0">Salesforceのレポートが2,000行で切れるのは、レポートの実行画面が2,000行までしか表示せず、外部ツールがレポートを読むときに使うレポートAPIも先頭2,000行までしか返さない仕様だからです<sup><a href="#s1">[1]</a><a href="#s3">[3]</a></sup>。データが欠けているわけではありません。全件が欲しいときは、エクスポートで「詳細のみ」のCSVを選べば行数の上限なしでファイルに出せます<sup><a href="#s2">[2]</a></sup>。スプレッドシートへ定期的に取り込みたい場合は、SOQLを書いて取るか、2,000件ずつ区切って取るツールを使います。</p>
+  </div>
+
+  <p>2,000行を超えるレポートを開くと、画面には「<b>このレポートには、最大表示数 (最大 2,000 行) を超える結果があります</b>」と表示されます<sup><a href="#s8">[8]</a></sup>。このページでは、2,000行の上限がかかる方法とかからない方法を分けて並べ、無料で全件を取る方法から順に説明します。</p>
+
+  <section class="card">
+    <h2 style="margin-top:0">2,000行の上限がかかる方法・かからない方法</h2>
+    <p>件数はSalesforce・Google・Microsoftの公式ページに書かれている値です。</p>
+    <div class="tbl">
+    <table>
+      <tr><th>方法</th><th>取れる件数</th><th>2,000行で切れるか</th></tr>
+      <tr><td>レポートの実行画面</td><td>2,000行まで表示<sup><a href="#s1">[1]</a></sup></td><td>切れる</td></tr>
+      <tr><td>レポートAPI(Reports and Dashboards REST API)</td><td>先頭2,000行<sup><a href="#s3">[3]</a></sup></td><td>切れる</td></tr>
+      <tr><td>Excel・Power BIの「Salesforce Reports」コネクタ</td><td>2,000行(Salesforce側の制限と明記)<sup><a href="#s4">[4]</a></sup></td><td>切れる</td></tr>
+      <tr><td>エクスポート「フォーマット済みレポート」のマトリックス形式</td><td>2,000行<sup><a href="#s1">[1]</a></sup></td><td>切れる</td></tr>
+      <tr><td>Google純正 Salesforce Connector のレポート取り込み</td><td>Googleのヘルプに記載なし<sup><a href="#s5">[5]</a></sup></td><td>止まる・失敗するという報告あり<sup><a href="#s6">[6]</a><a href="#s7">[7]</a></sup></td></tr>
+      <tr><td>エクスポート「詳細のみ」CSV・XLS</td><td>上限なし(10分でタイムアウト)<sup><a href="#s2">[2]</a></sup></td><td>切れない</td></tr>
+      <tr><td>エクスポート「詳細のみ」XLSX</td><td>10万行・100列<sup><a href="#s2">[2]</a></sup></td><td>切れない</td></tr>
+      <tr><td>エクスポート「フォーマット済みレポート」の表形式・サマリー形式</td><td>10万行・100列<sup><a href="#s2">[2]</a></sup></td><td>切れない</td></tr>
+      <tr><td>レポート購読のファイル添付(定期メール)</td><td>1万5千行・30列・3MB<sup><a href="#s1">[1]</a><a href="#s9">[9]</a></sup></td><td>切れない</td></tr>
+      <tr><td>Data Loader・Salesforce CLI・REST API・Bulk API 2.0(SOQLで取得)</td><td>REST APIは1回2,000件ずつ、続きを取れば全件<sup><a href="#s10">[10]</a></sup>。Bulk API 2.0は総件数の上限記載なし<sup><a href="#s11">[11]</a></sup></td><td>切れない(SOQLが必要)</td></tr>
+    </table>
+    </div>
+    <p>2026年7月からは、有償組織(本番・Sandbox)で画面からエクスポートするたびに、ステップアップ認証(追加のMFA)を求められることがあります<sup><a href="#s12">[12]</a></sup>。詳しくは「<a href="step-up-authentication.html">ステップアップ認証・MFA必須化の後もレポートの自動連携は動くか</a>」にまとめました。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">無料で全件を取る方法</h2>
+    <ol>
+      <li><b>1回だけ欲しい</b>: レポートの「エクスポート」で「詳細のみ」のCSVを選びます。10分でタイムアウトするほど大きいレポートは、条件で分けて何回かに分けます<sup><a href="#s1">[1]</a><a href="#s2">[2]</a></sup>。</li>
+      <li><b>毎週・毎月メールで届けばいい</b>: レポート購読でファイルを添付します。1万5千行・30列・3MBまでで、超えた分は切り捨てです。Lightningのみで、管理者が機能を有効にする必要があり、公式ヘルプ上はベータ扱いです<sup><a href="#s1">[1]</a><a href="#s9">[9]</a></sup>。</li>
+      <li><b>SOQLを書ける人がいる</b>: Data Loaderのコマンドライン版、Salesforce CLI、REST APIやBulk API 2.0を呼ぶ自作スクリプトで、全件を定期的に取れます<sup><a href="#s10">[10]</a><a href="#s11">[11]</a></sup>。レポートではなく、オブジェクトと項目と条件をSOQLで指定し直すことになります。</li>
+      <li><b>オブジェクト単位のバックアップでいい</b>: 設定の「データエクスポート」で、オブジェクトごとのCSVをZIPで受け取れます。Enterprise以上は週1回、Professional・Developerは29日ごとです<sup><a href="#s13">[13]</a></sup>。</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Googleスプレッドシートに自動で取り込みたい場合</h2>
+    <p>Google純正の Salesforce Connector は、レポートの取り込みとSOQL・クエリビルダーでの取り込みに対応し、4・8・24時間ごとの自動更新を選べます<sup><a href="#s5">[5]</a></sup>。Googleのヘルプに行数の上限は書かれていませんが、レポート取り込みについては「2,000件以上の場合インポートができず、ヘッダだけ出力された」という2023年の投稿<sup><a href="#s6">[6]</a></sup>や、2026年7月に「2,000行を超えるレポートの取り込みがステップアップ認証で失敗する」という投稿<sup><a href="#s7">[7]</a></sup>があります。SOQLでの取り込みも、2022年に「1万2千行で止まった」という投稿があり<sup><a href="#s14">[14]</a></sup>、上限なしとは言い切れません。</p>
+    <p>Google Apps Scriptで自作する場合は、1回の実行が6分まで、外部への取得は1日2万回(Google Workspaceは10万回)までという制限があります<sup><a href="#s15">[15]</a></sup>。スプレッドシート1ファイルのセル数は1,000万までです<sup><a href="#s16">[16]</a></sup>。</p>
+    <p>純正コネクタとReportZenの違いは「<a href="vs-data-connector.html">Google純正のSalesforce Connector(旧 Data Connector for Salesforce)との違い</a>」で表にしています。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">ReportZenの取り方と、実測した件数</h2>
+    <p>ReportZenは、レポートAPIに「レコードIDが前回の最後のIDより大きい」という条件を足しながら、2,000件ずつ繰り返し取得します。レポートの項目・条件はそのまま使うので、SOQLは書きません。行数の上限は設けていません。</p>
+    <p>2026年9月17日に Salesforce Developer Edition で試したところ、2,354件のレポートを全件取得できました。ただし Developer Edition はデータ容量が5MBで、入れられるのは約2,500件です<sup><a href="#s17">[17]</a></sup>。2,354件は2,000行の壁を越えたことの確認で、上限を測った値ではありません。</p>
+    <p>対応しているのは表形式のレポートで、レコードIDの列(取引先IDなど)が入っている必要があります。集計形式・マトリックス形式には対応していません。</p>
+  </section>
+
+  <section class="buy">
+    <h2>ReportZen でできること</h2>
+    <ul>
+      <li>Salesforceのレポートを、SOQLを書かずにそのままGoogleスプレッドシートへ取り込む</li>
+      <li>2,000件ずつ自動で繰り返し取得して、全件を並べる(ライセンス)</li>
+      <li>1日1回、毎朝の自動更新(ライセンス)</li>
+      <li>インストールは無料。2,000件までの取得とCSVファイルの取り込みはライセンスなしで使えます</li>
+    </ul>
+    <a class="btn" href="https://workspace.google.com/marketplace/app/reportzen/544668955866" target="_blank" rel="noopener">Google Workspace Marketplace で入手</a>
+    <p class="note">接続には、Salesforceの管理者が接続アプリケーションを1回作る必要があります(<a href="../setup.html">手順</a>)。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">ほかの質問</h2>
+    <ul>
+      <li><a href="vs-data-connector.html">Google純正のSalesforce Connector(旧 Data Connector for Salesforce)との違い</a></li>
+      <li><a href="step-up-authentication.html">ステップアップ認証・MFA必須化(2026年9月1日)の後もレポートの自動連携は動くか</a></li>
+    </ul>
+  </section>
+
+  <h2>出典(2026-09-18 確認)</h2>
+  <ol class="src">
+    <li id="s1">Salesforce Help: レポートとダッシュボードの制限 <a href="https://help.salesforce.com/s/articleView?id=analytics.rd_reports_dashboards_limits.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=analytics.rd_reports_dashboards_limits.htm&amp;type=5</a></li>
+    <li id="s2">Salesforce Help: レポートのエクスポート <a href="https://help.salesforce.com/s/articleView?id=analytics.reports_export.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=analytics.reports_export.htm&amp;type=5</a></li>
+    <li id="s3">Reports and Dashboards REST API: Limits and Limitations <a href="https://developer.salesforce.com/docs/analytics/salesforce-analytics-rest-api/guide/sforce-analytics-rest-api-limits-limitations.html">https://developer.salesforce.com/docs/analytics/salesforce-analytics-rest-api/guide/sforce-analytics-rest-api-limits-limitations.html</a></li>
+    <li id="s4">Microsoft Learn: Salesforce Reports コネクタ <a href="https://learn.microsoft.com/en-us/power-query/connectors/salesforce-reports">https://learn.microsoft.com/en-us/power-query/connectors/salesforce-reports</a></li>
+    <li id="s5">Google ドキュメント エディタ ヘルプ: Salesforce のデータをスプレッドシートに取り込む <a href="https://support.google.com/docs/answer/9073952">https://support.google.com/docs/answer/9073952</a></li>
+    <li id="s6">Trailblazer Community(2023-08-21 投稿) <a href="https://trailhead.salesforce.com/trailblazer-community/feed/0D54V00007F31EMSAZ">https://trailhead.salesforce.com/trailblazer-community/feed/0D54V00007F31EMSAZ</a></li>
+    <li id="s7">Google ドキュメント エディタ コミュニティ(2026-07-10 投稿) <a href="https://support.google.com/docs/thread/449607525">https://support.google.com/docs/thread/449607525</a></li>
+    <li id="s8">Trailblazer Community(2025-02-19 投稿。画面の表示文言) <a href="https://trailhead.salesforce.com/trailblazer-community/feed/0D5KX000000ToVm0AK">https://trailhead.salesforce.com/trailblazer-community/feed/0D5KX000000ToVm0AK</a></li>
+    <li id="s9">Salesforce Help: レポート購読へのファイル添付 <a href="https://help.salesforce.com/s/articleView?id=analytics.reports_subscribe_attachment.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=analytics.reports_subscribe_attachment.htm&amp;type=5</a></li>
+    <li id="s10">REST API Developer Guide: SOQLクエリの実行 <a href="https://developer.salesforce.com/docs/platform/api-rest/guide/dome-query.html">https://developer.salesforce.com/docs/platform/api-rest/guide/dome-query.html</a></li>
+    <li id="s11">Salesforce Developer Limits: Bulk API 2.0 <a href="https://developer.salesforce.com/docs/platform/salesforce-app-limits-cheatsheet/guide/salesforce-app-limits-platform-bulkapi.html">https://developer.salesforce.com/docs/platform/salesforce-app-limits-cheatsheet/guide/salesforce-app-limits-platform-bulkapi.html</a></li>
+    <li id="s12">Salesforce Help 005321566: レポートアクションにおけるステップアップ認証への適用準備 <a href="https://help.salesforce.com/s/articleView?id=005321566&amp;language=ja&amp;type=1">https://help.salesforce.com/s/articleView?id=005321566&amp;language=ja&amp;type=1</a></li>
+    <li id="s13">Salesforce Help: データエクスポートサービス <a href="https://help.salesforce.com/s/articleView?id=xcloud.admin_exportdata.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.admin_exportdata.htm&amp;type=5</a></li>
+    <li id="s14">Google ドキュメント エディタ コミュニティ(2022年の投稿) <a href="https://support.google.com/docs/thread/181593437">https://support.google.com/docs/thread/181593437</a></li>
+    <li id="s15">Google Apps Script: Googleサービスの割り当て <a href="https://developers.google.com/apps-script/guides/services/quotas">https://developers.google.com/apps-script/guides/services/quotas</a></li>
+    <li id="s16">Google ドライブ ヘルプ: 保存できるファイルの上限 <a href="https://support.google.com/drive/answer/37603">https://support.google.com/drive/answer/37603</a></li>
+    <li id="s17">Salesforce Help: データストレージとファイルストレージの割り当て <a href="https://help.salesforce.com/s/articleView?id=xcloud.overview_storage.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.overview_storage.htm&amp;type=5</a> / 000383664: オブジェクト別のレコードサイズの目安 <a href="https://help.salesforce.com/s/articleView?id=000383664&amp;type=1">https://help.salesforce.com/s/articleView?id=000383664&amp;type=1</a></li>
+  </ol>
+</main>
+<footer>
+  <p>© 2026 ReportZen(Okamoto Tools) | <a href="../privacy.html">プライバシーポリシー</a> | <a href="../terms.html">利用規約</a> | <a href="../support.html">サポート</a><br>
+  よくある質問: <a href="2000-row-limit.html">2,000件で切れる理由と全件を取る方法</a> | <a href="vs-data-connector.html">Google純正コネクタとの違い</a> | <a href="step-up-authentication.html">ステップアップ認証後も自動連携は動くか</a><br>
+  本アドオンはSalesforce社・Google社の公式製品ではありません。Salesforce、Google スプレッドシートは各社の商標です。</p>
+</footer>
+</body>
+</html>

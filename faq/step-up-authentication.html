@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salesforceのステップアップ認証・MFA必須化(2026年9月1日)の後も、レポートの自動連携は動くか — ReportZen</title>
+<meta name="description" content="Salesforceのステップアップ認証(2026年7月〜)とMFA必須化(日本は2026年9月1日)の後も、レポートの自動連携は動くのか。公式FAQで対象外とされている操作、止まる連携の特徴、2026年9月17日の実測結果と、その実測から言えないことをまとめました。">
+<link rel="canonical" href="https://getreportzen.com/faq/step-up-authentication.html">
+<link rel="alternate" hreflang="ja" href="https://getreportzen.com/faq/step-up-authentication.html">
+<link rel="alternate" hreflang="en" href="https://getreportzen.com/en/faq/step-up-authentication.html">
+<link rel="stylesheet" href="../_style.css">
+<style>
+  .answer { background: var(--surface); border: 1px solid var(--border); border-left: 5px solid var(--accent); border-radius: 10px; padding: 18px 22px; margin: 18px 0 26px; }
+  .meta { color: var(--muted); font-size: 13px; margin: 0 0 6px; }
+  .buy a:not(.btn) { color: #fff; }
+  .src { font-size: 13px; color: var(--muted); }
+  .src li { word-break: break-all; }
+  .tbl { overflow-x: auto; }
+  blockquote { margin: 12px 0; padding: 4px 16px; border-left: 3px solid var(--border); color: var(--muted); }
+  sup a { text-decoration: none; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "inLanguage": "ja",
+  "dateModified": "2026-09-19",
+  "author": { "@type": "Organization", "name": "Okamoto Tools" },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Salesforceのステップアップ認証の後も、レポートの自動連携は動きますか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Salesforceの公式FAQでは、ステップアップ認証がかかるのは画面での操作(対話型UIセッション)だけで、接続アプリケーションなどからのAPIアクセスや、購読・定期実行による自動配信は対象外とされています。ただし、APIで接続していても画面のエクスポートと同じ経路でデータを取るツールは止まることがあり、Google純正のSalesforce Connectorでは2,000行を超える取り込みが失敗するという報告が出ています。" }
+    },
+    {
+      "@type": "Question",
+      "name": "2026年9月1日のMFA必須化と、エクスポート時の認証は同じものですか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "別の変更です。エクスポートのたびに求められる認証は2026年7月から順に始まったステップアップ認証で、9月1日(日本と韓国)のMFA必須化は有償組織の全従業員ユーザーの画面ログインが対象です。" }
+    },
+    {
+      "@type": "Question",
+      "name": "MFA必須化で止まる連携と止まらない連携の違いは何ですか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "公式ヘルプでは、JWTベアラーフローとクライアントクレデンシャルフローは画面ログインがないため影響を受けないとされています。Webサーバーフローは接続時の画面ログインでMFAを求められます。ユーザー名とパスワードで接続する方式はMFA強制後にログインできなくなることがあり、OAuthのユーザー名パスワードフローは2027年2月20日に廃止されます。" }
+    },
+    {
+      "@type": "Question",
+      "name": "ReportZenはステップアップ認証の後も全件取得できましたか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "2026年9月17日にSalesforce Developer Editionで2,354件のレポートを全件取得し、認証画面もエラーも出ませんでした。ただし開発者組織はステップアップ認証の対象外なので、ステップアップがかかる状態で動いたことの確認にはなっていません。有償組織での実測はまだありません。" }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="../">ReportZen</a>
+  <nav>
+    <a href="../setup.html">Salesforce接続の手順</a>
+    <a href="../privacy.html">プライバシーポリシー</a>
+    <a href="../terms.html">利用規約</a>
+    <a href="../support.html">サポート</a>
+    <a href="../en/faq/step-up-authentication.html">English</a>
+  </nav>
+</header>
+<main>
+  <p class="meta">よくある質問 / 最終更新 2026-09-19 / 作成 Okamoto Tools</p>
+  <h1>ステップアップ認証・MFA必須化(2026年9月1日)の後も、レポートの自動連携は動くか</h1>
+
+  <div class="answer">
+    <p style="margin:0">Salesforceの公式FAQでは、ステップアップ認証がかかるのは画面での操作だけで、接続アプリケーションなどからのAPIアクセスと、購読・定期実行による自動配信は対象外とされています<sup><a href="#s1">[1]</a></sup>。9月1日のMFA必須化も画面ログインが対象で、JWTベアラーフローやクライアントクレデンシャルフローで接続する連携は影響を受けないと書かれています<sup><a href="#s2">[2]</a></sup>。ただし、APIで接続していても画面のエクスポートと同じ経路でデータを取るツールは止まることがあります。Google純正の Salesforce Connector では、2,000行を超えるレポートの取り込みがステップアップ認証で失敗するという報告が出ています<sup><a href="#s3">[3]</a></sup>。</p>
+  </div>
+
+  <section class="card">
+    <h2 style="margin-top:0">7月のステップアップ認証と、9月のMFA必須化は別の変更</h2>
+    <p>エクスポートのたびに認証を求められるのは、9月のMFA必須化ではなく、7月から始まったステップアップ認証の方です。日付は本番組織のもので、Sandboxはこれより早く始まっています。</p>
+    <div class="tbl">
+    <table>
+      <tr><th>時期</th><th>変更</th><th>対象</th></tr>
+      <tr><td>2026年7月1日から約30日かけて順に</td><td>レポートのエクスポート時にステップアップ認証(追加のMFA)を求める。再認証までの間隔は管理者が1〜120分で設定<sup><a href="#s1">[1]</a></sup></td><td>有償の本番・Sandbox組織</td></tr>
+      <tr><td>2026年7月27日から</td><td>普段と大きく違うレポート操作を検知すると、ステップアップ認証を求める<sup><a href="#s4">[4]</a></sup></td><td>同上(現時点の対象は主に画面からのダウンロード)</td></tr>
+      <tr><td>2026年9月1日(日本と韓国)</td><td>全従業員ユーザーの画面ログインにMFAを強制<sup><a href="#s2">[2]</a></sup></td><td>有償の本番・Sandbox組織</td></tr>
+    </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">公式FAQで対象外とされているもの</h2>
+    <p>ステップアップ認証のナレッジ記事 005321566 のFAQでは、次の操作が対象外とされています<sup><a href="#s1">[1]</a></sup>。一部には「不具合が報告されており修正予定」と注記があります。</p>
+    <ul>
+      <li>画面でレポートを表示するだけの操作</li>
+      <li>購読・定期実行による自動のレポート配信</li>
+      <li>レポート・ダッシュボードへのAPIアクセス(連携、接続アプリケーション、プログラムからの取得)</li>
+      <li>Developer Console・WorkbenchでのSOQL</li>
+      <li>開発者組織・トライアル組織などの無償組織</li>
+    </ul>
+    <p>APIについての原文は次のとおりです。</p>
+    <blockquote>ステップアップ認証は、非対話型APIセッションには適用されません。レポートやダッシュボードへのAPIベースのアクセス(インテグレーション、接続アプリケーション、プログラムによるデータ取得を含む)はすべて、ステップアップ認証の対象外です。ステップアップ認証が必要となるのは、対話型UIセッションのみです。</blockquote>
+    <p>Salesforceの公式ブログ(2026年7月7日)も、人手なしで動く自動のバックグラウンドジョブは「null-sessionチェック」によってステップアップを通らないようにした、と説明しています<sup><a href="#s5">[5]</a></sup>。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">自動連携が止まるかを分ける2か所</h2>
+    <ol>
+      <li><b>接続するときに画面ログインを挟むか。</b>Webサーバーフローは接続時の画面ログインでMFAを求められます。JWTベアラーフローとクライアントクレデンシャルフローは画面ログインがないので影響を受けません<sup><a href="#s2">[2]</a></sup>。ユーザー名とパスワードで接続する方式は、MFA強制後にログインできなくなることがあります<sup><a href="#s6">[6]</a></sup>。OAuthのユーザー名パスワードフローは2027年2月20日に廃止されます<sup><a href="#s7">[7]</a></sup>。</li>
+      <li><b>データを「エクスポート」と同じ経路で取るか。</b>2026年7月10日のGoogleコミュニティの投稿では、純正 Salesforce Connector で2,000行を超える取り込みが失敗し、Salesforceの本人確認履歴に理由「Export and Print Reports」の認証が保留のまま残っていたと報告されています<sup><a href="#s3">[3]</a></sup>。OAuthで接続していても、取得の経路によっては止まるということです。どのツールがどの経路で取っているかは、外からは分かりません。</li>
+    </ol>
+    <p>このほか、管理者が接続アプリケーションに「高保証セッションが必要」を設定している組織では、承認ステップのないフローはブロックされると公式ヘルプに書かれています<sup><a href="#s8">[8]</a></sup>。クライアントクレデンシャルフローも承認ステップがないので、同じ扱いになると読めます。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">ReportZenで試した結果(2026年9月17日)</h2>
+    <p>ReportZenはクライアントクレデンシャルフロー(人の操作を挟まないサーバー間の接続方式)で接続し、レポートAPIで2,000件ずつ取得します。</p>
+    <div class="tbl">
+    <table>
+      <tr><th>項目</th><th>内容</th></tr>
+      <tr><td>日時</td><td>2026年9月17日 7:56(日本時間)</td></tr>
+      <tr><td>組織</td><td>Salesforce Developer Edition</td></tr>
+      <tr><td>使ったもの</td><td>ReportZen(Google Workspace Marketplace版・ライセンス登録済み)、表形式レポート</td></tr>
+      <tr><td>結果</td><td>見出しを除いて2,354件を全件取得。認証・本人確認の画面は出ず、エラーもなし</td></tr>
+      <tr><td>回数</td><td>1回</td></tr>
+    </table>
+    </div>
+    <p>この結果から言えるのは、2,000行の壁に当たらなかったことまでです。</p>
+    <ul>
+      <li><b>ステップアップ認証がかかる状態で動いた、とは言えません。</b>開発者組織はステップアップ認証の対象外です<sup><a href="#s1">[1]</a></sup>。</li>
+      <li><b>上限を測ったものではありません。</b>Developer Editionのデータ容量は5MBで、入れられるのは約2,500件です<sup><a href="#s9">[9]</a></sup>。</li>
+      <li><b>1回だけの結果です。</b>普段と違う操作に反応する検知型のステップアップ<sup><a href="#s4">[4]</a></sup>は、1回では出ない可能性があります。</li>
+    </ul>
+    <p>有償組織(Sandboxを含む)で同じことを試せたら、このページに追記します。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">連携ツールを選ぶ・作るときに確かめること</h2>
+    <ol>
+      <li>接続方式(OAuthのフロー)は何か。ユーザー名とパスワードで接続していないか</li>
+      <li>データを画面のエクスポートと同じ経路で取っていないか</li>
+      <li>管理者が接続アプリケーションやレポートに高保証セッションを要求していないか</li>
+      <li>クライアントクレデンシャルフローなら、実行ユーザーの権限を必要最小限にしているか。鍵が漏れると誰でもトークンを取れるため、定期的に鍵を変えるよう公式ヘルプで案内されています<sup><a href="#s10">[10]</a></sup></li>
+    </ol>
+  </section>
+
+  <section class="buy">
+    <h2>ReportZen でできること</h2>
+    <ul>
+      <li>Salesforceのレポートを、SOQLを書かずにそのままGoogleスプレッドシートへ取り込む</li>
+      <li>2,000件ずつ自動で繰り返し取得して、全件を並べる(ライセンス)</li>
+      <li>1日1回、毎朝の自動更新(ライセンス)</li>
+      <li>インストールは無料。2,000件までの取得とCSVファイルの取り込みはライセンスなしで使えます</li>
+    </ul>
+    <a class="btn" href="https://workspace.google.com/marketplace/app/reportzen/544668955866" target="_blank" rel="noopener">Google Workspace Marketplace で入手</a>
+    <p class="note">接続には、Salesforceの管理者が接続アプリケーションを1回作る必要があります(<a href="../setup.html">手順</a>)。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">ほかの質問</h2>
+    <ul>
+      <li><a href="2000-row-limit.html">Salesforceのレポートが2,000件(2,000行)で切れる理由と、全件を取る方法</a></li>
+      <li><a href="vs-data-connector.html">Google純正のSalesforce Connector(旧 Data Connector for Salesforce)との違い</a></li>
+    </ul>
+  </section>
+
+  <h2>出典(2026-09-18 確認)</h2>
+  <ol class="src">
+    <li id="s1">Salesforce Help 005321566: レポートアクションにおけるステップアップ認証への適用準備 <a href="https://help.salesforce.com/s/articleView?id=005321566&amp;language=ja&amp;type=1">https://help.salesforce.com/s/articleView?id=005321566&amp;language=ja&amp;type=1</a></li>
+    <li id="s2">Salesforce Help 005321561: 全従業員ユーザーに対するMFA(多要素認証)の適用準備 <a href="https://help.salesforce.com/s/articleView?id=005321561&amp;language=ja&amp;type=1">https://help.salesforce.com/s/articleView?id=005321561&amp;language=ja&amp;type=1</a></li>
+    <li id="s3">Google ドキュメント エディタ コミュニティ「Salesforce Connector: Report imports over 2K rows fail due to step-up authentication (MFA) challenge」(2026-07-10) <a href="https://support.google.com/docs/thread/449607525">https://support.google.com/docs/thread/449607525</a></li>
+    <li id="s4">Salesforce Help 005321567: レポート操作の異常検知によるステップアップ認証 <a href="https://help.salesforce.com/s/articleView?id=005321567&amp;type=1">https://help.salesforce.com/s/articleView?id=005321567&amp;type=1</a></li>
+    <li id="s5">Salesforce Blog: Balancing Security and Agility: Updates to Step-Up Authentication for Reports and Dashboards(2026-07-07) <a href="https://www.salesforce.com/blog/balancing-security-and-agility-updates-to-step-up-authentication-for-reports-and-dashboards/">https://www.salesforce.com/blog/balancing-security-and-agility-updates-to-step-up-authentication-for-reports-and-dashboards/</a></li>
+    <li id="s6">Salesforce Help: Troubleshoot Integration or API User Account Login Issues After MFA Enforcement <a href="https://help.salesforce.com/s/articleView?id=xcloud.mfa_passkey_integration_api_login_after_enforcement.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.mfa_passkey_integration_api_login_after_enforcement.htm&amp;type=5</a></li>
+    <li id="s7">Salesforce リリースノート: OAuthユーザー名パスワードフローの廃止 <a href="https://help.salesforce.com/s/articleView?id=release-notes.rn_security_unpw_flow_retirement.htm&amp;release=262&amp;type=5">https://help.salesforce.com/s/articleView?id=release-notes.rn_security_unpw_flow_retirement.htm&amp;release=262&amp;type=5</a></li>
+    <li id="s8">Salesforce Help: 接続アプリケーションのセッションポリシー <a href="https://help.salesforce.com/s/articleView?id=xcloud.connected_app_manage_session_policies.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.connected_app_manage_session_policies.htm&amp;type=5</a></li>
+    <li id="s9">Salesforce Help: データストレージとファイルストレージの割り当て <a href="https://help.salesforce.com/s/articleView?id=xcloud.overview_storage.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.overview_storage.htm&amp;type=5</a></li>
+    <li id="s10">Salesforce Help: OAuth 2.0 Client Credentials Flow for Server-to-Server Integration <a href="https://help.salesforce.com/s/articleView?id=xcloud.remoteaccess_oauth_client_credentials_flow.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.remoteaccess_oauth_client_credentials_flow.htm&amp;type=5</a></li>
+  </ol>
+</main>
+<footer>
+  <p>© 2026 ReportZen(Okamoto Tools) | <a href="../privacy.html">プライバシーポリシー</a> | <a href="../terms.html">利用規約</a> | <a href="../support.html">サポート</a><br>
+  よくある質問: <a href="2000-row-limit.html">2,000件で切れる理由と全件を取る方法</a> | <a href="vs-data-connector.html">Google純正コネクタとの違い</a> | <a href="step-up-authentication.html">ステップアップ認証後も自動連携は動くか</a><br>
+  本アドオンはSalesforce社・Google社の公式製品ではありません。Salesforce、Google スプレッドシートは各社の商標です。</p>
+</footer>
+</body>
+</html>

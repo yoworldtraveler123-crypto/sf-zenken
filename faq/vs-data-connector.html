@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google純正のSalesforce Connector(旧 Data Connector for Salesforce)との違い — ReportZen</title>
+<meta name="description" content="Googleスプレッドシート純正の Salesforce Connector(旧 Data Connector for Salesforce)とReportZenの違いを表で比べます。2,000行を超えるレポートの扱い、レポートをそのまま使えるか、自動更新の間隔、表示言語、導入の手間。">
+<link rel="canonical" href="https://getreportzen.com/faq/vs-data-connector.html">
+<link rel="alternate" hreflang="ja" href="https://getreportzen.com/faq/vs-data-connector.html">
+<link rel="alternate" hreflang="en" href="https://getreportzen.com/en/faq/vs-data-connector.html">
+<link rel="stylesheet" href="../_style.css">
+<style>
+  .answer { background: var(--surface); border: 1px solid var(--border); border-left: 5px solid var(--accent); border-radius: 10px; padding: 18px 22px; margin: 18px 0 26px; }
+  .meta { color: var(--muted); font-size: 13px; margin: 0 0 6px; }
+  .buy a:not(.btn) { color: #fff; }
+  .src { font-size: 13px; color: var(--muted); }
+  .src li { word-break: break-all; }
+  .tbl { overflow-x: auto; }
+  sup a { text-decoration: none; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "inLanguage": "ja",
+  "dateModified": "2026-09-19",
+  "author": { "@type": "Organization", "name": "Okamoto Tools" },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Google純正のSalesforce Connector(旧 Data Connector for Salesforce)とReportZenの一番の違いは何ですか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "2,000行を超えるレポートの扱いです。純正コネクタは行数の上限を公表していませんが、2,000行を超えるレポートの取り込みで止まる・失敗するという報告が続いています。ReportZenはレポートを2,000件ずつ区切って取り、全件を並べます。" }
+    },
+    {
+      "@type": "Question",
+      "name": "純正のSalesforce Connectorの方が向いているのはどんな場合ですか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "レポートが2,000行に届かない場合、スプレッドシートからSalesforceへデータを書き戻したい場合、SOQLやクエリビルダーで取り込みたい場合、4時間・8時間ごとに更新したい場合です。ReportZenは読み取り専用で、更新は1日1回です。" }
+    },
+    {
+      "@type": "Question",
+      "name": "導入の手間はどう違いますか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "純正コネクタは各自がSalesforceのユーザー名とパスワードでサインインして接続します。ReportZenはSalesforceの管理者が接続アプリケーションを1回作り、発行された鍵をアドオンに入力します。管理者の協力が得られない場合も、ReportZenのCSV取り込みは権限なしで使えます。" }
+    },
+    {
+      "@type": "Question",
+      "name": "表示言語は日本語ですか?",
+      "acceptedAnswer": { "@type": "Answer", "text": "ReportZenは日本語と英語に対応し、スプレッドシートの言語設定に合わせて自動で切り替わります。純正コネクタの画面の表示言語は、このページでは確認していません。" }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="../">ReportZen</a>
+  <nav>
+    <a href="../setup.html">Salesforce接続の手順</a>
+    <a href="../privacy.html">プライバシーポリシー</a>
+    <a href="../terms.html">利用規約</a>
+    <a href="../support.html">サポート</a>
+    <a href="../en/faq/vs-data-connector.html">English</a>
+  </nav>
+</header>
+<main>
+  <p class="meta">よくある質問 / 最終更新 2026-09-19 / 作成 Okamoto Tools</p>
+  <h1>Google純正のSalesforce Connector(旧 Data Connector for Salesforce)との違い</h1>
+
+  <div class="answer">
+    <p style="margin:0">どちらもSalesforceのレポートをGoogleスプレッドシートに取り込むアドオンで、大きな違いは2,000行を超えるレポートの扱いです。Google純正の Salesforce Connector は行数の上限を公表していませんが<sup><a href="#s1">[1]</a></sup>、2,000行を超えるレポートの取り込みで止まる・失敗するという報告が続いています<sup><a href="#s3">[3]</a><a href="#s4">[4]</a></sup>。ReportZenはレポートを2,000件ずつ区切って取り、全件を並べます。一方で、Salesforceへの書き戻し、SOQLでの取り込み、4時間・8時間ごとの更新は、純正コネクタにしかできません。</p>
+  </div>
+
+  <section class="card">
+    <h2 style="margin-top:0">比較表</h2>
+    <p>純正コネクタの欄はGoogleのヘルプ<sup><a href="#s1">[1]</a></sup>とMarketplaceの掲載ページ<sup><a href="#s2">[2]</a></sup>、利用者の投稿をもとにしています。</p>
+    <div class="tbl">
+    <table>
+      <tr><th>項目</th><th>Salesforce Connector(Google)</th><th>ReportZen</th></tr>
+      <tr><td>2,000行を超えるレポート</td><td>ヘルプに上限の記載なし。2,000行を超えると「ヘッダだけ出力された」「取り込みが失敗する」という報告あり<sup><a href="#s3">[3]</a><a href="#s4">[4]</a></sup></td><td>2,000件ずつ繰り返し取得して全件(ライセンス)。ライセンスなしは2,000件まで</td></tr>
+      <tr><td>レポートをそのまま使えるか</td><td>使える。ほかにクエリビルダー・SOQL、最大5オブジェクトの指定でも取り込める<sup><a href="#s1">[1]</a></sup></td><td>使える。SOQLは不要。対応は表形式のレポートのみ(集計形式・マトリックス形式は非対応)で、レコードIDの列が必要</td></tr>
+      <tr><td>自動更新</td><td>4・8・24時間ごとから選ぶ<sup><a href="#s1">[1]</a></sup></td><td>1日1回、毎朝(ライセンス)。複数のレポートをまとめて更新</td></tr>
+      <tr><td>Salesforceへの書き戻し</td><td>できる(新規作成・更新)<sup><a href="#s1">[1]</a></sup></td><td>できない(読み取りのみ)</td></tr>
+      <tr><td>表示言語</td><td>このページでは確認していません</td><td>日本語・英語(スプレッドシートの言語設定で自動で切り替え)</td></tr>
+      <tr><td>導入の手間</td><td>Marketplaceから入れて、各自がSalesforceのユーザー名とパスワードでサインイン<sup><a href="#s1">[1]</a></sup></td><td>Marketplaceから入れる。Salesforceの管理者が接続アプリケーションを1回作り、鍵をアドオンに入力する(<a href="../setup.html">手順</a>)。CSVの取り込みだけなら権限不要</td></tr>
+      <tr><td>取得するときの権限</td><td>サインインした本人の権限</td><td>管理者が接続アプリケーションに指定した「実行ユーザー」の権限<sup><a href="#s5">[5]</a></sup></td></tr>
+      <tr><td>ステップアップ認証(2026年7月〜)</td><td>2,000行を超える取り込みが本人確認待ちで失敗するという報告あり<sup><a href="#s4">[4]</a></sup></td><td>サーバー間の接続方式(クライアントクレデンシャルフロー)とレポートAPIで取得。有償組織での実測はまだない(<a href="step-up-authentication.html">詳しく</a>)</td></tr>
+      <tr><td>費用</td><td>無料</td><td>インストール無料。全件取得と自動更新はライセンスが必要</td></tr>
+    </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">どちらを選ぶか</h2>
+    <ul>
+      <li><b>レポートが2,000行に届かない、書き戻しやSOQLを使いたい</b>: 純正の Salesforce Connector で足ります。</li>
+      <li><b>2,000行を超えるレポートを、レポートの形のまま毎日スプレッドシートに入れたい</b>: ReportZenが向いています。</li>
+      <li><b>管理者に接続アプリケーションを作ってもらえない</b>: 純正コネクタを使うか、ReportZenのCSV取り込み(エクスポートしたCSVをドラッグ&ドロップ)を使います。</li>
+    </ul>
+    <p>2,000行の上限がどこでかかるかは「<a href="2000-row-limit.html">Salesforceのレポートが2,000件で切れる理由と、全件を取る方法</a>」にまとめています。</p>
+  </section>
+
+  <section class="buy">
+    <h2>ReportZen でできること</h2>
+    <ul>
+      <li>Salesforceのレポートを、SOQLを書かずにそのままGoogleスプレッドシートへ取り込む</li>
+      <li>2,000件ずつ自動で繰り返し取得して、全件を並べる(ライセンス)</li>
+      <li>1日1回、毎朝の自動更新(ライセンス)</li>
+      <li>インストールは無料。2,000件までの取得とCSVファイルの取り込みはライセンスなしで使えます</li>
+    </ul>
+    <a class="btn" href="https://workspace.google.com/marketplace/app/reportzen/544668955866" target="_blank" rel="noopener">Google Workspace Marketplace で入手</a>
+    <p class="note">接続には、Salesforceの管理者が接続アプリケーションを1回作る必要があります(<a href="../setup.html">手順</a>)。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">ほかの質問</h2>
+    <ul>
+      <li><a href="2000-row-limit.html">Salesforceのレポートが2,000件(2,000行)で切れる理由と、全件を取る方法</a></li>
+      <li><a href="step-up-authentication.html">ステップアップ認証・MFA必須化(2026年9月1日)の後もレポートの自動連携は動くか</a></li>
+    </ul>
+  </section>
+
+  <h2>出典(2026-09-19 確認)</h2>
+  <ol class="src">
+    <li id="s1">Google ドキュメント エディタ ヘルプ: Salesforce のデータをスプレッドシートに取り込む <a href="https://support.google.com/docs/answer/9073952">https://support.google.com/docs/answer/9073952</a></li>
+    <li id="s2">Google Workspace Marketplace: Salesforce Connector <a href="https://workspace.google.com/marketplace/app/salesforce_connector/857627895310">https://workspace.google.com/marketplace/app/salesforce_connector/857627895310</a></li>
+    <li id="s3">Trailblazer Community(2023-08-21 投稿) <a href="https://trailhead.salesforce.com/trailblazer-community/feed/0D54V00007F31EMSAZ">https://trailhead.salesforce.com/trailblazer-community/feed/0D54V00007F31EMSAZ</a></li>
+    <li id="s4">Google ドキュメント エディタ コミュニティ(2026-07-10 投稿) <a href="https://support.google.com/docs/thread/449607525">https://support.google.com/docs/thread/449607525</a></li>
+    <li id="s5">Salesforce Help: OAuth 2.0 Client Credentials Flow for Server-to-Server Integration <a href="https://help.salesforce.com/s/articleView?id=xcloud.remoteaccess_oauth_client_credentials_flow.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.remoteaccess_oauth_client_credentials_flow.htm&amp;type=5</a></li>
+  </ol>
+</main>
+<footer>
+  <p>© 2026 ReportZen(Okamoto Tools) | <a href="../privacy.html">プライバシーポリシー</a> | <a href="../terms.html">利用規約</a> | <a href="../support.html">サポート</a><br>
+  よくある質問: <a href="2000-row-limit.html">2,000件で切れる理由と全件を取る方法</a> | <a href="vs-data-connector.html">Google純正コネクタとの違い</a> | <a href="step-up-authentication.html">ステップアップ認証後も自動連携は動くか</a><br>
+  本アドオンはSalesforce社・Google社の公式製品ではありません。Salesforce、Google スプレッドシートは各社の商標です。</p>
+</footer>
+</body>
+</html>

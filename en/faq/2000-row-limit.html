@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why Salesforce reports stop at 2,000 rows, and how to get all rows — ReportZen</title>
+<meta name="description" content="Salesforce reports stop at 2,000 rows because the report view and the Reports REST API return only the first 2,000 rows. Where the 2,000-row limit applies, where it does not, and free ways to export every row.">
+<link rel="canonical" href="https://getreportzen.com/en/faq/2000-row-limit.html">
+<link rel="alternate" hreflang="ja" href="https://getreportzen.com/faq/2000-row-limit.html">
+<link rel="alternate" hreflang="en" href="https://getreportzen.com/en/faq/2000-row-limit.html">
+<link rel="stylesheet" href="../../_style.css">
+<style>
+  .answer { background: var(--surface); border: 1px solid var(--border); border-left: 5px solid var(--accent); border-radius: 10px; padding: 18px 22px; margin: 18px 0 26px; }
+  .meta { color: var(--muted); font-size: 13px; margin: 0 0 6px; }
+  .buy a:not(.btn) { color: #fff; }
+  .src { font-size: 13px; color: var(--muted); }
+  .src li { word-break: break-all; }
+  .tbl { overflow-x: auto; }
+  sup a { text-decoration: none; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "inLanguage": "en",
+  "dateModified": "2026-09-19",
+  "author": { "@type": "Organization", "name": "Okamoto Tools" },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does my Salesforce report stop at 2,000 rows?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The report view in Salesforce displays up to 2,000 rows, and the Reports and Dashboards REST API, which external tools use to read reports, returns only the first 2,000 rows. The data in Salesforce is not missing; only the display and the API response are capped." }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I export all rows of a Salesforce report for free?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Export the report as Details Only in CSV or XLS format. There is no row limit (the export times out after 10 minutes). XLSX is limited to 100,000 rows. Since July 2026, paid orgs may ask for step-up authentication (an extra MFA check) on each export." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a free way to get more than 2,000 rows on a schedule?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Report subscriptions with file attachments deliver up to 15,000 rows, 30 columns and 3 MB by email (Lightning only, admin must enable it, labeled beta). Beyond 15,000 rows, use Data Loader command line, Salesforce CLI, or a script that calls the REST API or Bulk API 2.0. These require SOQL." }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Google's Salesforce Connector for Sheets also stop at 2,000 rows?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Google's help page does not state a row limit. However, users have reported since 2022 that report imports over 2,000 rows return only headers or fail, and in July 2026 users reported that such imports fail due to step-up authentication." }
+    },
+    {
+      "@type": "Question",
+      "name": "How many rows can ReportZen fetch?",
+      "acceptedAnswer": { "@type": "Answer", "text": "ReportZen pages through the Reports API 2,000 rows at a time and sets no row cap. On 2026-09-17 it fetched all 2,354 rows of a report in a Salesforce Developer Edition org. Developer Edition storage allows only about 2,500 records, so this is not a measured upper limit. Google Sheets allows up to 10 million cells per file." }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="../">ReportZen</a>
+  <nav>
+    <a href="../setup.html">Setup</a>
+    <a href="../privacy.html">Privacy</a>
+    <a href="../terms.html">Terms</a>
+    <a href="../support.html">Support</a>
+    <a href="../../faq/2000-row-limit.html">日本語</a>
+  </nav>
+</header>
+<main>
+  <p class="meta">FAQ / Last updated 2026-09-19 / By Okamoto Tools</p>
+  <h1>Why Salesforce reports stop at 2,000 rows, and how to get all rows</h1>
+
+  <div class="answer">
+    <p style="margin:0">Salesforce reports stop at 2,000 rows because the report view displays up to 2,000 rows, and the Reports REST API that external tools use returns only the first 2,000 rows<sup><a href="#s1">[1]</a><a href="#s3">[3]</a></sup>. Your data is not missing. To get every row once, export the report as <b>Details Only</b> in CSV format, which has no row limit<sup><a href="#s2">[2]</a></sup>. To load all rows into a spreadsheet on a schedule, either query with SOQL or use a tool that fetches the report in 2,000-row pages.</p>
+  </div>
+
+  <p>When a report has more than 2,000 rows, Salesforce shows a notice that the results exceed the 2,000-row display maximum (in the Japanese UI: 「このレポートには、最大表示数 (最大 2,000 行) を超える結果があります」)<sup><a href="#s8">[8]</a></sup>. This page lists where the 2,000-row limit applies and where it does not.</p>
+
+  <section class="card">
+    <h2 style="margin-top:0">Where the 2,000-row limit applies</h2>
+    <p>Figures are from official Salesforce, Google and Microsoft pages.</p>
+    <div class="tbl">
+    <table>
+      <tr><th>Method</th><th>Rows</th><th>Stops at 2,000?</th></tr>
+      <tr><td>Report view in Salesforce</td><td>Displays up to 2,000<sup><a href="#s1">[1]</a></sup></td><td>Yes</td></tr>
+      <tr><td>Reports and Dashboards REST API</td><td>First 2,000 rows<sup><a href="#s3">[3]</a></sup></td><td>Yes</td></tr>
+      <tr><td>Excel / Power BI "Salesforce Reports" connector</td><td>2,000 (stated as a Salesforce limit)<sup><a href="#s4">[4]</a></sup></td><td>Yes</td></tr>
+      <tr><td>Formatted Report export, matrix format</td><td>2,000<sup><a href="#s1">[1]</a></sup></td><td>Yes</td></tr>
+      <tr><td>Google Salesforce Connector, report import</td><td>Not stated in Google's help<sup><a href="#s5">[5]</a></sup></td><td>Users report stops and failures<sup><a href="#s6">[6]</a><a href="#s7">[7]</a></sup></td></tr>
+      <tr><td>Details Only export, CSV / XLS</td><td>No limit (10-minute timeout)<sup><a href="#s2">[2]</a></sup></td><td>No</td></tr>
+      <tr><td>Details Only export, XLSX</td><td>100,000 rows, 100 columns<sup><a href="#s2">[2]</a></sup></td><td>No</td></tr>
+      <tr><td>Formatted Report export, tabular / summary</td><td>100,000 rows, 100 columns<sup><a href="#s2">[2]</a></sup></td><td>No</td></tr>
+      <tr><td>Report subscription with file attachment</td><td>15,000 rows, 30 columns, 3 MB<sup><a href="#s1">[1]</a><a href="#s9">[9]</a></sup></td><td>No</td></tr>
+      <tr><td>Data Loader, Salesforce CLI, REST API, Bulk API 2.0 (SOQL)</td><td>REST API returns 2,000 per call; follow the next page to get all<sup><a href="#s10">[10]</a></sup>. Bulk API 2.0 states no total cap<sup><a href="#s11">[11]</a></sup></td><td>No (SOQL required)</td></tr>
+    </table>
+    </div>
+    <p>Since July 2026, paid production and sandbox orgs may require step-up authentication (an extra MFA check) each time a user exports a report from the UI<sup><a href="#s12">[12]</a></sup>. See <a href="step-up-authentication.html">Do report integrations keep working after step-up authentication and MFA enforcement?</a></p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Free ways to get all rows</h2>
+    <ol>
+      <li><b>Once</b>: Export as Details Only, CSV. If the export times out after 10 minutes, split the report by a filter<sup><a href="#s1">[1]</a><a href="#s2">[2]</a></sup>.</li>
+      <li><b>By email on a schedule</b>: Subscribe to the report with a file attachment. Up to 15,000 rows, 30 columns and 3 MB; the rest is cut off. Lightning only, must be enabled by an admin, labeled beta<sup><a href="#s1">[1]</a><a href="#s9">[9]</a></sup>.</li>
+      <li><b>If someone can write SOQL</b>: Data Loader command line, Salesforce CLI, or a script calling the REST API or Bulk API 2.0<sup><a href="#s10">[10]</a><a href="#s11">[11]</a></sup>. You rewrite the report as a query on objects, fields and filters.</li>
+      <li><b>Object-level backup</b>: Setup &gt; Data Export gives zipped CSVs per object, weekly on Enterprise and above, every 29 days on Professional and Developer<sup><a href="#s13">[13]</a></sup>.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Loading reports into Google Sheets automatically</h2>
+    <p>Google's Salesforce Connector imports reports or SOQL / query builder results and refreshes every 4, 8 or 24 hours<sup><a href="#s5">[5]</a></sup>. Google's help does not state a row limit. Users have posted that report imports over 2,000 rows returned only headers (2023)<sup><a href="#s6">[6]</a></sup> and that they fail due to step-up authentication (July 2026)<sup><a href="#s7">[7]</a></sup>. A 2022 post also reports SOQL imports stopping at 12,000 rows<sup><a href="#s14">[14]</a></sup>.</p>
+    <p>If you build your own with Google Apps Script, one execution is limited to 6 minutes and URL fetches to 20,000 per day (100,000 on Google Workspace)<sup><a href="#s15">[15]</a></sup>. A Google Sheets file holds up to 10 million cells<sup><a href="#s16">[16]</a></sup>.</p>
+    <p>For a side-by-side table, see <a href="vs-data-connector.html">ReportZen vs. Google's Salesforce Connector (formerly Data Connector for Salesforce)</a>.</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">How ReportZen fetches, and what we measured</h2>
+    <p>ReportZen calls the Reports API repeatedly, adding a filter "record ID greater than the last ID fetched", 2,000 rows at a time. It uses the report's own columns and filters, so no SOQL is needed. There is no row cap.</p>
+    <p>On 2026-09-17 we fetched all 2,354 rows of a report in a Salesforce Developer Edition org. Developer Edition has 5 MB of data storage, about 2,500 records<sup><a href="#s17">[17]</a></sup>, so 2,354 rows shows the 2,000-row wall was passed. It is not an upper limit.</p>
+    <p>Supported: tabular reports that include a record ID column (e.g. Account ID). Summary and matrix reports are not supported.</p>
+  </section>
+
+  <section class="buy">
+    <h2>What ReportZen does</h2>
+    <ul>
+      <li>Loads a Salesforce report into Google Sheets as it is, no SOQL</li>
+      <li>Pages through the report 2,000 rows at a time to get every row (license)</li>
+      <li>Refreshes once a day, every morning (license)</li>
+      <li>Free to install. Fetches up to 2,000 rows and CSV import work without a license</li>
+    </ul>
+    <a class="btn" href="https://workspace.google.com/marketplace/app/reportzen/544668955866" target="_blank" rel="noopener">Get it on Google Workspace Marketplace</a>
+    <p class="note">A Salesforce admin needs to create one connected app first (<a href="../setup.html">setup guide</a>).</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">More questions</h2>
+    <ul>
+      <li><a href="vs-data-connector.html">ReportZen vs. Google's Salesforce Connector (formerly Data Connector for Salesforce)</a></li>
+      <li><a href="step-up-authentication.html">Do report integrations keep working after step-up authentication and MFA enforcement (Sept 1, 2026)?</a></li>
+    </ul>
+  </section>
+
+  <h2>Sources (checked 2026-09-18)</h2>
+  <ol class="src">
+    <li id="s1">Salesforce Help: Reports and Dashboards Limits <a href="https://help.salesforce.com/s/articleView?id=analytics.rd_reports_dashboards_limits.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=analytics.rd_reports_dashboards_limits.htm&amp;type=5</a></li>
+    <li id="s2">Salesforce Help: Export a Report <a href="https://help.salesforce.com/s/articleView?id=analytics.reports_export.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=analytics.reports_export.htm&amp;type=5</a></li>
+    <li id="s3">Reports and Dashboards REST API: Limits and Limitations <a href="https://developer.salesforce.com/docs/analytics/salesforce-analytics-rest-api/guide/sforce-analytics-rest-api-limits-limitations.html">https://developer.salesforce.com/docs/analytics/salesforce-analytics-rest-api/guide/sforce-analytics-rest-api-limits-limitations.html</a></li>
+    <li id="s4">Microsoft Learn: Salesforce Reports connector <a href="https://learn.microsoft.com/en-us/power-query/connectors/salesforce-reports">https://learn.microsoft.com/en-us/power-query/connectors/salesforce-reports</a></li>
+    <li id="s5">Google Docs Editors Help: Import Salesforce data into Sheets <a href="https://support.google.com/docs/answer/9073952">https://support.google.com/docs/answer/9073952</a></li>
+    <li id="s6">Trailblazer Community (post in Japanese, 2023-08-21) <a href="https://trailhead.salesforce.com/trailblazer-community/feed/0D54V00007F31EMSAZ">https://trailhead.salesforce.com/trailblazer-community/feed/0D54V00007F31EMSAZ</a></li>
+    <li id="s7">Google Docs Editors Community (2026-07-10) <a href="https://support.google.com/docs/thread/449607525">https://support.google.com/docs/thread/449607525</a></li>
+    <li id="s8">Trailblazer Community (post in Japanese, 2025-02-19, quoting the notice) <a href="https://trailhead.salesforce.com/trailblazer-community/feed/0D5KX000000ToVm0AK">https://trailhead.salesforce.com/trailblazer-community/feed/0D5KX000000ToVm0AK</a></li>
+    <li id="s9">Salesforce Help: Attach files to report subscriptions <a href="https://help.salesforce.com/s/articleView?id=analytics.reports_subscribe_attachment.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=analytics.reports_subscribe_attachment.htm&amp;type=5</a></li>
+    <li id="s10">REST API Developer Guide: Execute a SOQL Query <a href="https://developer.salesforce.com/docs/platform/api-rest/guide/dome-query.html">https://developer.salesforce.com/docs/platform/api-rest/guide/dome-query.html</a></li>
+    <li id="s11">Salesforce Developer Limits: Bulk API 2.0 <a href="https://developer.salesforce.com/docs/platform/salesforce-app-limits-cheatsheet/guide/salesforce-app-limits-platform-bulkapi.html">https://developer.salesforce.com/docs/platform/salesforce-app-limits-cheatsheet/guide/salesforce-app-limits-platform-bulkapi.html</a></li>
+    <li id="s12">Salesforce Help 005321566: Step-up authentication for report actions <a href="https://help.salesforce.com/s/articleView?id=005321566&amp;type=1">https://help.salesforce.com/s/articleView?id=005321566&amp;type=1</a></li>
+    <li id="s13">Salesforce Help: Data Export Service <a href="https://help.salesforce.com/s/articleView?id=xcloud.admin_exportdata.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.admin_exportdata.htm&amp;type=5</a></li>
+    <li id="s14">Google Docs Editors Community (2022) <a href="https://support.google.com/docs/thread/181593437">https://support.google.com/docs/thread/181593437</a></li>
+    <li id="s15">Google Apps Script: Quotas for Google Services <a href="https://developers.google.com/apps-script/guides/services/quotas">https://developers.google.com/apps-script/guides/services/quotas</a></li>
+    <li id="s16">Google Drive Help: Files you can store in Google Drive <a href="https://support.google.com/drive/answer/37603">https://support.google.com/drive/answer/37603</a></li>
+    <li id="s17">Salesforce Help: Data and File Storage Allocations <a href="https://help.salesforce.com/s/articleView?id=xcloud.overview_storage.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.overview_storage.htm&amp;type=5</a> / 000383664: Estimated Record Size by Object Type <a href="https://help.salesforce.com/s/articleView?id=000383664&amp;type=1">https://help.salesforce.com/s/articleView?id=000383664&amp;type=1</a></li>
+  </ol>
+</main>
+<footer>
+  <p>© 2026 ReportZen (Okamoto Tools) | <a href="../privacy.html">Privacy</a> | <a href="../terms.html">Terms</a> | <a href="../support.html">Support</a><br>
+  FAQ: <a href="2000-row-limit.html">Why reports stop at 2,000 rows</a> | <a href="vs-data-connector.html">vs. Google's Salesforce Connector</a> | <a href="step-up-authentication.html">Step-up authentication and integrations</a><br>
+  This add-on is not an official product of Salesforce, Inc. or Google LLC. Salesforce and Google Sheets are trademarks of their respective owners.</p>
+</footer>
+</body>
+</html>

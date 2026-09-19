@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Do Salesforce report integrations keep working after step-up authentication and MFA enforcement in Japan (Sept 1, 2026)? — ReportZen</title>
+<meta name="description" content="Do automated Salesforce report integrations still work after step-up authentication (from July 2026) and MFA enforcement (Japan, Sept 1, 2026)? What Salesforce officially excludes, which integrations can stop, and what our 2026-09-17 test does and does not show.">
+<link rel="canonical" href="https://getreportzen.com/en/faq/step-up-authentication.html">
+<link rel="alternate" hreflang="ja" href="https://getreportzen.com/faq/step-up-authentication.html">
+<link rel="alternate" hreflang="en" href="https://getreportzen.com/en/faq/step-up-authentication.html">
+<link rel="stylesheet" href="../../_style.css">
+<style>
+  .answer { background: var(--surface); border: 1px solid var(--border); border-left: 5px solid var(--accent); border-radius: 10px; padding: 18px 22px; margin: 18px 0 26px; }
+  .meta { color: var(--muted); font-size: 13px; margin: 0 0 6px; }
+  .buy a:not(.btn) { color: #fff; }
+  .src { font-size: 13px; color: var(--muted); }
+  .src li { word-break: break-all; }
+  .tbl { overflow-x: auto; }
+  blockquote { margin: 12px 0; padding: 4px 16px; border-left: 3px solid var(--border); color: var(--muted); }
+  sup a { text-decoration: none; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "inLanguage": "en",
+  "dateModified": "2026-09-19",
+  "author": { "@type": "Organization", "name": "Okamoto Tools" },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Do automated Salesforce report integrations still work after step-up authentication?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Salesforce's official FAQ says step-up authentication applies only to interactive UI sessions. API access to reports, including integrations and connected apps, and scheduled report subscriptions are excluded. However, tools that fetch data through the same path as a UI export can still be blocked; users of Google's Salesforce Connector reported report imports over 2,000 rows failing in July 2026." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the September 1, 2026 MFA enforcement the same as the extra check on report export?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. The check on each export is step-up authentication, rolled out from July 1, 2026. The September 1, 2026 change (Japan and Korea) enforces MFA on UI login for all employee users in paid orgs." }
+    },
+    {
+      "@type": "Question",
+      "name": "Which integrations are affected by MFA enforcement?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Salesforce states that the JWT bearer flow and the client credentials flow are not affected because they involve no UI login. The web server flow asks for MFA at the login during authorization. Username-password logins may fail after MFA enforcement, and the OAuth username-password flow will be retired on February 20, 2027." }
+    },
+    {
+      "@type": "Question",
+      "name": "Did ReportZen fetch all rows after step-up authentication started?",
+      "acceptedAnswer": { "@type": "Answer", "text": "On 2026-09-17 ReportZen fetched all 2,354 rows of a report in a Salesforce Developer Edition org, with no authentication prompt and no error. Developer orgs are excluded from step-up authentication, so this does not show that it works while step-up is active. It has not yet been tested in a paid org." }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="../">ReportZen</a>
+  <nav>
+    <a href="../setup.html">Setup</a>
+    <a href="../privacy.html">Privacy</a>
+    <a href="../terms.html">Terms</a>
+    <a href="../support.html">Support</a>
+    <a href="../../faq/step-up-authentication.html">日本語</a>
+  </nav>
+</header>
+<main>
+  <p class="meta">FAQ / Last updated 2026-09-19 / By Okamoto Tools</p>
+  <h1>Do report integrations keep working after step-up authentication and MFA enforcement in Japan (Sept 1, 2026)?</h1>
+
+  <div class="answer">
+    <p style="margin:0">According to Salesforce's official FAQ, step-up authentication applies only to interactive UI sessions. API access to reports (integrations, connected apps, programmatic retrieval) and scheduled report subscriptions are excluded<sup><a href="#s1">[1]</a></sup>. The September 1 MFA enforcement covers UI login, and Salesforce states that integrations using the JWT bearer flow or client credentials flow are not affected<sup><a href="#s2">[2]</a></sup>. However, a tool connected through the API can still be blocked if it fetches data through the same path as a UI export: users of Google's Salesforce Connector reported that report imports over 2,000 rows fail due to step-up authentication<sup><a href="#s3">[3]</a></sup>.</p>
+  </div>
+
+  <section class="card">
+    <h2 style="margin-top:0">July step-up authentication and September MFA are separate changes</h2>
+    <p>The extra check on every export comes from step-up authentication, not from the September MFA enforcement. Dates are for production orgs; sandboxes started earlier.</p>
+    <div class="tbl">
+    <table>
+      <tr><th>When</th><th>Change</th><th>Who</th></tr>
+      <tr><td>Rolled out over ~30 days from July 1, 2026</td><td>Step-up authentication (an extra MFA check) on report export. Admins set the re-check interval from 1 to 120 minutes<sup><a href="#s1">[1]</a></sup></td><td>Paid production and sandbox orgs</td></tr>
+      <tr><td>From July 27, 2026</td><td>Step-up when unusual report activity is detected<sup><a href="#s4">[4]</a></sup></td><td>Same (currently mainly UI downloads)</td></tr>
+      <tr><td>September 1, 2026 (Japan and Korea)</td><td>MFA enforced on UI login for all employee users<sup><a href="#s2">[2]</a></sup></td><td>Paid production and sandbox orgs</td></tr>
+    </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">What the official FAQ excludes</h2>
+    <p>The FAQ in Salesforce knowledge article 005321566 lists these as out of scope<sup><a href="#s1">[1]</a></sup>. Some items carry a note that a reported bug is scheduled to be fixed.</p>
+    <ul>
+      <li>Viewing a report in the UI</li>
+      <li>Scheduled and subscribed report delivery</li>
+      <li>API-based access to reports and dashboards, including integrations, connected apps and programmatic data retrieval; only interactive UI sessions require step-up</li>
+      <li>SOQL in Developer Console and Workbench</li>
+      <li>Free orgs such as Developer Edition, trial and scratch orgs</li>
+    </ul>
+    <p>Salesforce's blog post of July 7, 2026 says the same for background jobs<sup><a href="#s5">[5]</a></sup>:</p>
+    <blockquote>automated background jobs will now bypass step-up via a null-session check</blockquote>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Two things decide whether an integration stops</h2>
+    <ol>
+      <li><b>Does connecting involve a UI login?</b> The web server flow asks for MFA at the login during authorization. The JWT bearer flow and client credentials flow have no UI login and are not affected<sup><a href="#s2">[2]</a></sup>. Username-password logins may fail after MFA enforcement<sup><a href="#s6">[6]</a></sup>, and the OAuth username-password flow will be retired on February 20, 2027<sup><a href="#s7">[7]</a></sup>.</li>
+      <li><b>Does the tool fetch data through the export path?</b> A July 10, 2026 post in the Google Docs Editors Community reports that Google's Salesforce Connector failed to import reports over 2,000 rows, with an "Export and Print Reports" identity verification left pending in Salesforce<sup><a href="#s3">[3]</a></sup>. An OAuth connection alone does not guarantee the fetch is treated as API access, and which path a given tool uses is not visible from outside.</li>
+    </ol>
+    <p>Also, if an admin sets "High assurance session required" on a connected app, Salesforce says flows without a user approval step are blocked<sup><a href="#s8">[8]</a></sup>. The client credentials flow has no approval step, so it would likely be blocked too.</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Our test with ReportZen (2026-09-17)</h2>
+    <p>ReportZen connects with the client credentials flow (server-to-server, no user interaction) and fetches reports through the Reports API, 2,000 rows at a time.</p>
+    <div class="tbl">
+    <table>
+      <tr><th>Item</th><th>Result</th></tr>
+      <tr><td>Date</td><td>2026-09-17, 07:56 JST</td></tr>
+      <tr><td>Org</td><td>Salesforce Developer Edition</td></tr>
+      <tr><td>Setup</td><td>ReportZen (Google Workspace Marketplace version, licensed), tabular report</td></tr>
+      <tr><td>Result</td><td>All 2,354 rows fetched (excluding header). No authentication prompt, no error</td></tr>
+      <tr><td>Runs</td><td>1</td></tr>
+    </table>
+    </div>
+    <p>What this shows is limited to passing the 2,000-row wall.</p>
+    <ul>
+      <li><b>It does not show that ReportZen works while step-up is active.</b> Developer orgs are excluded from step-up authentication<sup><a href="#s1">[1]</a></sup>.</li>
+      <li><b>It is not an upper limit.</b> Developer Edition has 5 MB of data storage, about 2,500 records<sup><a href="#s9">[9]</a></sup>.</li>
+      <li><b>It was a single run.</b> Anomaly-based step-up<sup><a href="#s4">[4]</a></sup> may not trigger in one run.</li>
+    </ul>
+    <p>We will add results here once we test in a paid org (including a sandbox).</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">What to check when choosing or building an integration</h2>
+    <ol>
+      <li>Which OAuth flow does it use? Does it log in with a username and password?</li>
+      <li>Does it fetch data through the same path as a UI export?</li>
+      <li>Does your admin require high-assurance sessions for the connected app or for reports?</li>
+      <li>With the client credentials flow, is the run-as user's access kept to the minimum? Anyone with the keys can get a token, so Salesforce advises rotating them regularly<sup><a href="#s10">[10]</a></sup>.</li>
+    </ol>
+  </section>
+
+  <section class="buy">
+    <h2>What ReportZen does</h2>
+    <ul>
+      <li>Loads a Salesforce report into Google Sheets as it is, no SOQL</li>
+      <li>Pages through the report 2,000 rows at a time to get every row (license)</li>
+      <li>Refreshes once a day, every morning (license)</li>
+      <li>Free to install. Fetches up to 2,000 rows and CSV import work without a license</li>
+    </ul>
+    <a class="btn" href="https://workspace.google.com/marketplace/app/reportzen/544668955866" target="_blank" rel="noopener">Get it on Google Workspace Marketplace</a>
+    <p class="note">A Salesforce admin needs to create one connected app first (<a href="../setup.html">setup guide</a>).</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">More questions</h2>
+    <ul>
+      <li><a href="2000-row-limit.html">Why Salesforce reports stop at 2,000 rows, and how to get all rows</a></li>
+      <li><a href="vs-data-connector.html">ReportZen vs. Google's Salesforce Connector (formerly Data Connector for Salesforce)</a></li>
+    </ul>
+  </section>
+
+  <h2>Sources (checked 2026-09-18)</h2>
+  <ol class="src">
+    <li id="s1">Salesforce Help 005321566: Step-up authentication for report actions <a href="https://help.salesforce.com/s/articleView?id=005321566&amp;type=1">https://help.salesforce.com/s/articleView?id=005321566&amp;type=1</a></li>
+    <li id="s2">Salesforce Help 005321561: MFA enforcement for all employee users <a href="https://help.salesforce.com/s/articleView?id=005321561&amp;type=1">https://help.salesforce.com/s/articleView?id=005321561&amp;type=1</a></li>
+    <li id="s3">Google Docs Editors Community: "Salesforce Connector: Report imports over 2K rows fail due to step-up authentication (MFA) challenge" (2026-07-10) <a href="https://support.google.com/docs/thread/449607525">https://support.google.com/docs/thread/449607525</a></li>
+    <li id="s4">Salesforce Help 005321567: Step-up authentication on anomalous report activity <a href="https://help.salesforce.com/s/articleView?id=005321567&amp;type=1">https://help.salesforce.com/s/articleView?id=005321567&amp;type=1</a></li>
+    <li id="s5">Salesforce Blog: Balancing Security and Agility: Updates to Step-Up Authentication for Reports and Dashboards (2026-07-07) <a href="https://www.salesforce.com/blog/balancing-security-and-agility-updates-to-step-up-authentication-for-reports-and-dashboards/">https://www.salesforce.com/blog/balancing-security-and-agility-updates-to-step-up-authentication-for-reports-and-dashboards/</a></li>
+    <li id="s6">Salesforce Help: Troubleshoot Integration or API User Account Login Issues After MFA Enforcement <a href="https://help.salesforce.com/s/articleView?id=xcloud.mfa_passkey_integration_api_login_after_enforcement.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.mfa_passkey_integration_api_login_after_enforcement.htm&amp;type=5</a></li>
+    <li id="s7">Salesforce Release Notes: OAuth username-password flow retirement <a href="https://help.salesforce.com/s/articleView?id=release-notes.rn_security_unpw_flow_retirement.htm&amp;release=262&amp;type=5">https://help.salesforce.com/s/articleView?id=release-notes.rn_security_unpw_flow_retirement.htm&amp;release=262&amp;type=5</a></li>
+    <li id="s8">Salesforce Help: Manage session policies for connected apps <a href="https://help.salesforce.com/s/articleView?id=xcloud.connected_app_manage_session_policies.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.connected_app_manage_session_policies.htm&amp;type=5</a></li>
+    <li id="s9">Salesforce Help: Data and File Storage Allocations <a href="https://help.salesforce.com/s/articleView?id=xcloud.overview_storage.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.overview_storage.htm&amp;type=5</a></li>
+    <li id="s10">Salesforce Help: OAuth 2.0 Client Credentials Flow for Server-to-Server Integration <a href="https://help.salesforce.com/s/articleView?id=xcloud.remoteaccess_oauth_client_credentials_flow.htm&amp;type=5">https://help.salesforce.com/s/articleView?id=xcloud.remoteaccess_oauth_client_credentials_flow.htm&amp;type=5</a></li>
+  </ol>
+</main>
+<footer>
+  <p>© 2026 ReportZen (Okamoto Tools) | <a href="../privacy.html">Privacy</a> | <a href="../terms.html">Terms</a> | <a href="../support.html">Support</a><br>
+  FAQ: <a href="2000-row-limit.html">Why reports stop at 2,000 rows</a> | <a href="vs-data-connector.html">vs. Google's Salesforce Connector</a> | <a href="step-up-authentication.html">Step-up authentication and integrations</a><br>
+  This add-on is not an official product of Salesforce, Inc. or Google LLC. Salesforce and Google Sheets are trademarks of their respective owners.</p>
+</footer>
+</body>
+</html>

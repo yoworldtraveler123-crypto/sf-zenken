@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://getreportzen.com/</loc>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/en/</loc>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/setup.html</loc>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/en/setup.html</loc>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/privacy.html</loc>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/en/privacy.html</loc>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/terms.html</loc>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/en/terms.html</loc>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/support.html</loc>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/en/support.html</loc>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/faq/2000-row-limit.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getreportzen.com/faq/2000-row-limit.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getreportzen.com/en/faq/2000-row-limit.html"/>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/en/faq/2000-row-limit.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getreportzen.com/faq/2000-row-limit.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getreportzen.com/en/faq/2000-row-limit.html"/>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/faq/vs-data-connector.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getreportzen.com/faq/vs-data-connector.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getreportzen.com/en/faq/vs-data-connector.html"/>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/en/faq/vs-data-connector.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getreportzen.com/faq/vs-data-connector.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getreportzen.com/en/faq/vs-data-connector.html"/>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/faq/step-up-authentication.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getreportzen.com/faq/step-up-authentication.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getreportzen.com/en/faq/step-up-authentication.html"/>
+  </url>
+  <url>
+    <loc>https://getreportzen.com/en/faq/step-up-authentication.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://getreportzen.com/faq/step-up-authentication.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://getreportzen.com/en/faq/step-up-authentication.html"/>
+  </url>
+</urlset>
