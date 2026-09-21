@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>プライバシーポリシー — SheetPeek</title>
+<link rel="stylesheet" href="../_style.css">
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="./">SheetPeek</a>
+  <nav>
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="terms.html">利用規約</a>
+    <a href="support.html">サポート</a>
+    <a href="../">ReportZen</a>
+  </nav>
+</header>
+<main>
+  <h1>プライバシーポリシー</h1>
+  <p class="lead">最終更新日: 2026年9月21日</p>
+
+  <section class="card">
+    <h2 style="margin-top:0">基本方針</h2>
+    <p>SheetPeek(以下「本アドオン」)は、利用者のデータを<b>収集・保存・送信しません</b>。本アドオンの処理は、利用者が開いているスプレッドシートの中だけで完結します。開発者は利用者のデータにアクセスする手段を持ちません。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">本アドオンがアクセスする情報と目的</h2>
+    <table>
+      <tr><th>アクセス対象</th><th>目的</th></tr>
+      <tr><td>開いているスプレッドシート(spreadsheets.currentonly権限)</td><td>選択中のセルの数式を読み、その数式が参照している範囲の値と見出しを読み取って画面に表示するため。読み取りのみで、書き込みは行いません</td></tr>
+      <tr><td>サイドバー表示(script.container.ui権限)</td><td>参照先を表示するパネルを画面に出すため</td></tr>
+    </table>
+    <p><code>spreadsheets.currentonly</code> は、本アドオンを開いているそのファイルだけに限定された権限です。利用者の他のスプレッドシートやGoogleドライブには、技術的にアクセスできません。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">保存される情報</h2>
+    <p><b>ありません。</b>本アドオンは、読み取った値も、設定も、利用状況も保存しません。パネルを閉じると、表示していた内容はすべて消えます。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">外部への送信</h2>
+    <p><b>ありません。</b>本アドオンは外部のサーバーに接続しません。開発者のサーバーは存在せず、解析ツールも組み込んでいません。</p>
+    <p>数式の中に <code>IMPORTRANGE</code> があった場合、本アドオンはそのリンク先のファイルを読みません。「別ファイルなので読めません」と表示するだけです。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">第三者への提供</h2>
+    <p>提供する情報がないため、第三者への提供もありません。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Google ユーザーデータの取り扱い</h2>
+    <p>本アドオンによるGoogleユーザーデータの利用は、<a href="https://developers.google.com/terms/api-services-user-data-policy">Google API サービスのユーザーデータに関するポリシー</a>(限定的使用の要件を含む)に従います。読み取った内容は、利用者本人の画面に表示する目的にのみ使用し、それ以外の用途には使用しません。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">お問い合わせ</h2>
+    <p>メール: <code>yohei.19901031+sheetpeek@gmail.com</code></p>
+  </section>
+</main>
+<footer>
+  <p>© 2026 Okamoto Tools</p>
+</footer>
+</body>
+</html>

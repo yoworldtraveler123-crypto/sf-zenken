@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>サポート — SheetPeek</title>
+<link rel="stylesheet" href="../_style.css">
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="./">SheetPeek</a>
+  <nav>
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="terms.html">利用規約</a>
+    <a href="support.html">サポート</a>
+    <a href="../">ReportZen</a>
+  </nav>
+</header>
+<main>
+  <h1>サポート</h1>
+
+  <section class="card">
+    <h2 style="margin-top:0">お問い合わせ</h2>
+    <p>メール: <code>yohei.19901031+sheetpeek@gmail.com</code></p>
+    <ul>
+      <li>対応はメール(テキスト)のみです。通常2営業日以内の返信を心がけています。</li>
+      <li>うまく出ない数式があれば、その数式をそのまま貼っていただけると直しが早くなります。</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">よくあるつまずき</h2>
+    <table>
+      <tr><th>症状</th><th>確認すること</th></tr>
+      <tr><td>メニューに SheetPeek が出ない</td><td>スプレッドシートを開き直してください。アドオンを入れた直後は、開いていたファイルにはまだ出ません</td></tr>
+      <tr><td>パネルは出るが中身が空</td><td>選んでいるセルに数式が入っているか。数式のないセルでは、値だけを表示します</td></tr>
+      <tr><td>「別ファイルなので読めません」と出る</td><td><code>IMPORTRANGE</code> でつないでいる参照です。本アドオンは開いているファイルの外を読まない作りなので、仕様どおりの表示です</td></tr>
+      <tr><td>参照が1つも拾えない</td><td>名前付き範囲を使っていないか。A1形式で書かれていない参照は拾えないことがあります</td></tr>
+      <tr><td>セルを選んでもパネルが変わらない</td><td>パネルは1秒たたずに自動で追いかけます。変わらない場合はパネルを閉じて開き直してください</td></tr>
+    </table>
+  </section>
+</main>
+<footer>
+  <p>© 2026 Okamoto Tools</p>
+</footer>
+</body>
+</html>

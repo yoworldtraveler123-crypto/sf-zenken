@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SheetPeek — 数式が見ている先を、その場で出す</title>
+<meta name="description" content="Googleスプレッドシートのアドオン。セルを選ぶと、その数式が参照している範囲の中身を見出しつきで横に出します。別シートを開きに行く往復が消えます。無料。">
+<link rel="stylesheet" href="../_style.css">
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="./">SheetPeek</a>
+  <nav>
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="terms.html">利用規約</a>
+    <a href="support.html">サポート</a>
+    <a href="../">ReportZen</a>
+  </nav>
+</header>
+<main>
+  <h1>数式が見ている先を、その場で出す</h1>
+  <p class="lead">Googleスプレッドシートのアドオンです。セルを選ぶと、その数式が参照している範囲の中身が、見出しつきで横のパネルに出ます。</p>
+
+  <section class="card">
+    <h2 style="margin-top:0">こういうときに使います</h2>
+    <p>他の人が作ったシートを引き継いだとき、<code>=VLOOKUP(B2,'商品マスタ'!A:D,3,FALSE)</code> が何を見ているのかは、商品マスタを開かないと分かりません。開いて、列を数えて、また戻る。この往復が1日に何度も起きます。</p>
+    <p>SheetPeekは、参照先の中身をその場に出します。商品マスタを開かずに、3列目に何が入っているかが読めます。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">出るもの</h2>
+    <table>
+      <tr><th>項目</th><th>内容</th></tr>
+      <tr><td>参照先の中身</td><td>先頭5行×4列まで。1つのセルを指しているときは、その値と、そのセル自身の数式</td></tr>
+      <tr><td>見出し</td><td>参照先の1行目を拾って表示。何列目が何なのかを数えずに済みます</td></tr>
+      <tr><td>範囲の大きさ</td><td>「120行 × 4列」のように。うち値が入っている行数も出します</td></tr>
+      <tr><td>数式の読み下し</td><td>VLOOKUPなどを日本語の文に直します。「『B2』を、商品マスタA:Dの左端の列から探して、3列目の値を返しています」</td></tr>
+    </table>
+    <p>同じファイルの中なら、別のシートを指していても読みます。<code>IMPORTRANGE</code> で別のファイルを指している場合は、そこだけ「別ファイルなので読めません」と表示します。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">使い方</h2>
+    <ul>
+      <li>インストールすると、スプレッドシートの「拡張機能」メニューに <b>SheetPeek</b> が入ります</li>
+      <li>「参照先を見る」を選ぶと、右側にパネルが出ます</li>
+      <li>あとはセルをクリックするだけです。パネルは選んだセルを自動で追いかけます</li>
+      <li>参照ごとに出る「→ そこへ移動」を押すと、そのシートのその場所に飛びます。中身を直したいときはそのまま作業できます</li>
+    </ul>
+    <p>初めて使うときは「試し用のシートを作る」で、動きを確かめるためのシートを1枚作れます。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">触る範囲</h2>
+    <ul>
+      <li>読むのは<b>そのとき開いているスプレッドシートだけ</b>です。他のファイルやドライブには触れません</li>
+      <li>読んだ値は画面に出すだけで、<b>どこにも送りません</b>。保存もしません</li>
+      <li>アカウント登録はありません</li>
+    </ul>
+    <p>詳しくは<a href="privacy.html">プライバシーポリシー</a>に書いています。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">料金</h2>
+    <p><b>無料</b>です。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Chrome拡張版もあります</h2>
+    <p>同じ「参照先を見せる」目的で、Chrome拡張としても出しています。拡張版はGoogleの権限を使わず、ブラウザの中だけで動きます。アドオン版は「拡張機能」メニューから開く形で、拡張を入れられない環境でも使えます。</p>
+    <p><a href="https://chromewebstore.google.com/detail/hlgckggnegldcajjjeggilekafdpokmd">Chromeウェブストアで見る</a></p>
+  </section>
+</main>
+<footer>
+  <p>SheetPeek は Okamoto Tools が作っている道具のひとつです。同じ作者が <a href="../">ReportZen</a> を作っています。</p>
+  <p>© 2026 Okamoto Tools</p>
+</footer>
+</body>
+</html>
