@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>プライバシーポリシー — SheetPeek</title>
+<title>Privacy Policy — SheetPeek</title>
 <link rel="stylesheet" href="../_style.css">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2CCFGMVL6N"></script>
@@ -20,51 +20,134 @@
   </nav>
 </header>
 <main>
-  <h1>プライバシーポリシー</h1>
-  <p class="lead">最終更新日: 2026年9月22日</p>
+  <h1>Privacy Policy</h1>
+  <p class="lead">Last updated: September 23, 2026 — <a href="#ja">日本語版はこちら</a></p>
 
   <section class="card">
-    <h2 style="margin-top:0">基本方針</h2>
-    <p>SheetPeek(以下「本アドオン」)は、利用者のデータを<b>収集・保存・送信しません</b>。本アドオンの処理は、利用者が開いているスプレッドシートの中だけで完結します。開発者は利用者のデータにアクセスする手段を持ちません。</p>
+    <h2 style="margin-top:0">Summary</h2>
+    <p>SheetPeek (the "Add-on") is a Google Sheets add-on that shows the values referenced by the formula in the selected cell. All processing happens inside the spreadsheet the user has open. <b>The developer does not collect, store, or receive any Google user data</b>, and has no way to access it.</p>
   </section>
 
   <section class="card">
-    <h2 style="margin-top:0">本アドオンがアクセスする情報と目的</h2>
+    <h2 style="margin-top:0">1. Data Accessed</h2>
     <table>
-      <tr><th>アクセス対象</th><th>目的</th></tr>
-      <tr><td>開いているスプレッドシート(spreadsheets.currentonly権限)</td><td>選択中のセルの数式を読み、その数式が参照している範囲の値と見出しを読み取って画面に表示するため。読み取りのみで、書き込みは行いません</td></tr>
-      <tr><td>サイドバー表示(script.container.ui権限)</td><td>参照先を表示するパネルを画面に出すため</td></tr>
+      <tr><th>Scope</th><th>Google user data accessed</th></tr>
+      <tr><td><code>spreadsheets.currentonly</code></td><td>The contents of the spreadsheet the user currently has open: the formula in the selected cell, and the values and header rows of the ranges that formula refers to. Other spreadsheets and Google Drive files cannot be accessed.</td></tr>
+      <tr><td><code>script.container.ui</code></td><td>No user data. Used only to display the Add-on's sidebar inside the spreadsheet.</td></tr>
+      <tr><td><code>userinfo.email</code>, <code>userinfo.profile</code></td><td>Requested automatically by Google for add-on installation. The Add-on's code does not read or use the user's email address or profile.</td></tr>
     </table>
-    <p><code>spreadsheets.currentonly</code> は、本アドオンを開いているそのファイルだけに限定された権限です。利用者の他のスプレッドシートやGoogleドライブには、技術的にアクセスできません。</p>
   </section>
 
   <section class="card">
-    <h2 style="margin-top:0">保存される情報</h2>
-    <p><b>ありません。</b>本アドオンは、読み取った値も、設定も、利用状況も保存しません。パネルを閉じると、表示していた内容はすべて消えます。</p>
+    <h2 style="margin-top:0">2. Data Usage</h2>
+    <ul>
+      <li>The data above is used for one purpose only: to display, in the sidebar on the user's own screen, the values that the selected formula refers to.</li>
+      <li>The Add-on only reads data, with one exception: when the user chooses the menu item "試し用のシートを作る" (Create sample sheets), it adds demo sheets to the open file. It never overwrites or deletes the user's existing sheets.</li>
+      <li>Google user data is not used for advertising, is not sold, and is not used to develop, improve, or train generalized or non-personalized AI/ML models.</li>
+    </ul>
   </section>
 
   <section class="card">
-    <h2 style="margin-top:0">外部への送信</h2>
-    <p><b>ありません。</b>本アドオンは外部のサーバーに接続しません。開発者のサーバーは存在せず、解析ツールも組み込んでいません。</p>
-    <p>数式の中に <code>IMPORTRANGE</code> があった場合、本アドオンはそのリンク先のファイルを読みません。「別ファイルなので読めません」と表示するだけです。</p>
+    <h2 style="margin-top:0">3. Data Sharing</h2>
+    <p><b>Google user data is not shared, transferred, or disclosed to anyone</b>, including the developer. The Add-on does not connect to any external server, contains no analytics or tracking code, and uses no third-party services.</p>
   </section>
 
   <section class="card">
-    <h2 style="margin-top:0">第三者への提供</h2>
-    <p>提供する情報がないため、第三者への提供もありません。</p>
+    <h2 style="margin-top:0">4. Data Protection</h2>
+    <ul>
+      <li>The Add-on runs on Google Apps Script within the user's own Google account. The developer operates no servers or databases, so no data is ever transmitted outside Google.</li>
+      <li>Access is limited to the currently open file by the narrowest available scope (<code>spreadsheets.currentonly</code>), rather than a Drive-wide scope.</li>
+      <li>If a formula uses <code>IMPORTRANGE</code>, the Add-on does not open the linked file; it only shows that the range is in another file.</li>
+    </ul>
   </section>
 
   <section class="card">
-    <h2 style="margin-top:0">Google ユーザーデータの取り扱い</h2>
-    <p>本アドオンによるGoogleユーザーデータの利用は、<a href="https://developers.google.com/terms/api-services-user-data-policy">Google API サービスのユーザーデータに関するポリシー</a>(限定的使用の要件を含む)に従います。読み取った内容は、利用者本人の画面に表示する目的にのみ使用し、それ以外の用途には使用しません。</p>
+    <h2 style="margin-top:0">5. Data Retention and Deletion</h2>
+    <ul>
+      <li><b>No Google user data is retained.</b> Values are held in memory only while the sidebar displays them, and disappear when the sidebar is closed. Nothing is saved by the developer, so the retention period is zero.</li>
+      <li>Sample sheets created from the menu are part of the user's own file. The user can delete them at any time like any other sheet.</li>
+      <li>Users can revoke the Add-on's access at any time from their Google Account (<a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>) or by uninstalling it. To ask about your data, contact us at the address below.</li>
+    </ul>
   </section>
 
   <section class="card">
+    <h2 style="margin-top:0">Limited Use</h2>
+    <p>SheetPeek's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Website Analytics</h2>
+    <p>Separately from the Add-on, this website (getreportzen.com) uses Google Analytics with cookies to count page views and referrers anonymously. This does not involve any Google user data from the Add-on. You can stop it by disabling cookies in your browser.</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Contact</h2>
+    <p>Email: <code>yohei.19901031+sheetpeek@gmail.com</code></p>
+  </section>
+
+  <hr>
+
+  <h1 id="ja" lang="ja">プライバシーポリシー</h1>
+  <p class="lead" lang="ja">最終更新日: 2026年9月23日</p>
+
+  <section class="card" lang="ja">
+    <h2 style="margin-top:0">基本方針</h2>
+    <p>SheetPeek(以下「本アドオン」)は、選択したセルの数式が参照している値を表示するGoogleスプレッドシートのアドオンです。処理は利用者が開いているスプレッドシートの中だけで完結します。<b>開発者はGoogleユーザーデータを収集・保存・受信せず</b>、アクセスする手段も持ちません。</p>
+  </section>
+
+  <section class="card" lang="ja">
+    <h2 style="margin-top:0">1. アクセスするデータ(Data Accessed)</h2>
+    <table>
+      <tr><th>権限</th><th>アクセスするGoogleユーザーデータ</th></tr>
+      <tr><td><code>spreadsheets.currentonly</code></td><td>開いているスプレッドシートの内容(選択中のセルの数式と、その数式が参照している範囲の値・見出し行)。他のスプレッドシートやGoogleドライブのファイルにはアクセスできません。</td></tr>
+      <tr><td><code>script.container.ui</code></td><td>ユーザーデータはありません。サイドバーを画面に出すためだけに使います。</td></tr>
+      <tr><td><code>userinfo.email</code>・<code>userinfo.profile</code></td><td>アドオンのインストール時にGoogleが自動で要求するものです。本アドオンのコードはメールアドレスやプロフィールを読み取らず、使用しません。</td></tr>
+    </table>
+  </section>
+
+  <section class="card" lang="ja">
+    <h2 style="margin-top:0">2. データの使い方(Data Usage)</h2>
+    <ul>
+      <li>上記のデータは、選択した数式の参照先の値を利用者本人の画面(サイドバー)に表示する目的にのみ使います。</li>
+      <li>基本は読み取りのみです。例外として、メニューの「試し用のシートを作る」を選んだときだけ、開いているファイルに試し用のシートを追加します。既存のシートを上書き・削除することはありません。</li>
+      <li>Googleユーザーデータを広告に使うこと、販売すること、汎用のAI/機械学習モデルの開発・改良・学習に使うことはありません。</li>
+    </ul>
+  </section>
+
+  <section class="card" lang="ja">
+    <h2 style="margin-top:0">3. 第三者への提供(Data Sharing)</h2>
+    <p><b>Googleユーザーデータを、開発者を含む誰にも提供・移転・開示しません。</b>本アドオンは外部のサーバーに接続せず、解析やトラッキングのコードも、第三者のサービスも使っていません。</p>
+  </section>
+
+  <section class="card" lang="ja">
+    <h2 style="margin-top:0">4. データの保護(Data Protection)</h2>
+    <ul>
+      <li>本アドオンは利用者自身のGoogleアカウント内のGoogle Apps Script上で動きます。開発者が運用するサーバーやデータベースはなく、データがGoogleの外に送られることはありません。</li>
+      <li>アクセス範囲は、ドライブ全体ではなく「開いているファイルだけ」に限られる最小の権限(<code>spreadsheets.currentonly</code>)にしています。</li>
+      <li>数式に <code>IMPORTRANGE</code> があっても、リンク先のファイルは開きません。「別ファイルなので読めません」と表示するだけです。</li>
+    </ul>
+  </section>
+
+  <section class="card" lang="ja">
+    <h2 style="margin-top:0">5. 保存期間と削除(Data Retention and Deletion)</h2>
+    <ul>
+      <li><b>Googleユーザーデータは保存しません。</b>値はサイドバーに表示している間だけメモリ上にあり、閉じると消えます。開発者側には何も残らないため、保存期間はゼロです。</li>
+      <li>メニューから作った試し用のシートは利用者のファイルの一部です。ほかのシートと同じように、いつでも削除できます。</li>
+      <li>本アドオンのアクセス権は、Googleアカウントの設定(<a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>)またはアンインストールで、いつでも取り消せます。データについてのお問い合わせは下記までご連絡ください。</li>
+    </ul>
+  </section>
+
+  <section class="card" lang="ja">
+    <h2 style="margin-top:0">限定的使用(Limited Use)</h2>
+    <p>本アドオンによるGoogle APIから受け取った情報の利用と移転は、<a href="https://developers.google.com/terms/api-services-user-data-policy">Google API サービスのユーザーデータに関するポリシー</a>(限定的使用の要件を含む)に従います。</p>
+  </section>
+
+  <section class="card" lang="ja">
     <h2 style="margin-top:0">このWebサイトのアクセス解析</h2>
-    <p>本アドオンとは別に、このWebサイト(getreportzen.com)では、閲覧状況を把握するためにGoogle アナリティクスを使っています。Google アナリティクスはCookieを使って、ページの閲覧数や、どのサイトから来たかといった情報を匿名で集めます。個人を特定する情報は含みません。詳しくは<a href="https://marketingplatform.google.com/about/analytics/terms/jp/">Google アナリティクス利用規約</a>と<a href="https://policies.google.com/privacy?hl=ja">Google のプライバシーポリシー</a>をご覧ください。ブラウザの設定でCookieを無効にすれば、収集を止められます。</p>
+    <p>本アドオンとは別に、このWebサイト(getreportzen.com)では、閲覧状況を把握するためにGoogle アナリティクスを使っています。Cookieを使ってページの閲覧数や参照元を匿名で集めるもので、本アドオンのGoogleユーザーデータは含みません。詳しくは<a href="https://marketingplatform.google.com/about/analytics/terms/jp/">Google アナリティクス利用規約</a>と<a href="https://policies.google.com/privacy?hl=ja">Google のプライバシーポリシー</a>をご覧ください。ブラウザの設定でCookieを無効にすれば、収集を止められます。</p>
   </section>
 
-  <section class="card">
+  <section class="card" lang="ja">
     <h2 style="margin-top:0">お問い合わせ</h2>
     <p>メール: <code>yohei.19901031+sheetpeek@gmail.com</code></p>
   </section>
