@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chat Reply Check — make sure your reply answers what was asked</title>
+<meta name="description" content="A Chrome extension for Slack in the browser. When you hit send, the AI built into Chrome checks that your reply answers the question. Your text never leaves your PC. Free for 14 days, then $29 a year.">
+<link rel="stylesheet" href="../../_style.css">
+<link rel="alternate" hreflang="ja" href="https://getreportzen.com/chatreplycheck/">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2CCFGMVL6N"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-2CCFGMVL6N');</script>
+<style>
+  .shot { width: 100%; height: auto; border: 1px solid #e3e5eb; border-radius: 8px; margin: 6px 0 4px; }
+</style>
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="./">Chat Reply Check</a>
+  <nav>
+    <a href="../privacy.html">Privacy</a>
+    <a href="../">日本語</a>
+  </nav>
+</header>
+<main>
+  <h1>Make sure your reply answers what was asked</h1>
+  <p class="lead">A Chrome extension for Slack in the browser. The moment you hit send, the AI inside your PC reads the last few messages and your draft. It stops you only when your reply seems to miss the question, and suggests a fix.</p>
+
+  <section class="card">
+    <h2 style="margin-top:0">The reply it catches</h2>
+    <p>"Does Tuesday or Thursday work better for you?" — and you answer "I'll have the slides ready by Friday!" When you're busy, it's easy to reply to something other than what was asked. They have to ask again, and you notice only after it's sent.</p>
+    <img class="shot" src="../en-1.jpg" alt="The panel shown when a reply seems off: what they're asking, what might be off, and a suggested fix" width="1280" height="800" loading="lazy">
+    <p>If your reply answers the question, it's sent right away.</p>
+    <img class="shot" src="../en-2.jpg" alt="When the reply looks fine, it is sent and a short Looks good note appears" width="1280" height="800" loading="lazy">
+    <p style="font-size:13px;color:#5f6368">The feedback text in these images is an example. The real text is written by the AI each time.</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">What happens when you press Send</h2>
+    <table>
+      <tr><th>Case</th><th>What it does</th></tr>
+      <tr><td>Looks fine</td><td>Sends right away and shows a short "Looks good"</td></tr>
+      <tr><td>Looks off</td><td>Holds the message and shows the panel. Copy the fix, send it anyway, or go back and edit (Esc)</td></tr>
+      <tr><td>AI not ready, or too slow</td><td>Sends anyway. The check never stops you from sending</td></tr>
+    </table>
+    <p>Works in channels, threads and DMs. Short messages (under 8 characters by default), messages to yourself, and conversations you choose to skip are not checked.</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Your text never leaves your PC</h2>
+    <p>The check runs on Gemini Nano, the AI model built into Chrome. Message text is not sent to our server or anyone else's. There is no account, and your license key is verified inside the extension, so nothing goes over the network while you use it.</p>
+    <p>Details are in the <a href="../privacy.html">privacy policy</a>.</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Requirements</h2>
+    <p>Chrome's built-in AI runs only on some computers. After installing, click the toolbar icon and use "Try it" to see whether it works on yours. The 14-day trial gives you time to find out.</p>
+    <ul>
+      <li>Chrome 138 or later, on Windows 10/11, macOS 13 or later, Linux, or Chromebook Plus</li>
+      <li>22 GB of free disk space (Chrome downloads the AI model once)</li>
+      <li>A GPU with more than 4 GB of video memory, or 16 GB of RAM and 4 CPU cores</li>
+      <li>Not available on phones, tablets, or the Slack desktop app</li>
+    </ul>
+    <p style="font-size:13px;color:#5f6368">Requirements are from Google's <a href="https://developer.chrome.com/docs/ai/prompt-api" target="_blank" rel="noopener">Prompt API documentation</a>.</p>
+  </section>
+
+  <section class="buy" id="buy">
+    <h2>Get it</h2>
+    <p class="price">$29 / year <small>one-time payment, no automatic renewal</small></p>
+    <ul>
+      <li>Install it from the Chrome Web Store first. It's free for 14 days, no card needed</li>
+      <li>To keep using it, buy a one-year license key with the button below</li>
+      <li>Your key appears right after checkout. Click the extension icon, paste it into "License key" and press "Activate"</li>
+      <li>If the trial ends without a key, checking simply stops. Sending works as usual</li>
+    </ul>
+    <p data-prelaunch style="font-weight:bold">Under review on the Chrome Web Store. You can install it from here once it is published.</p>
+    <!--LAUNCH
+    <a class="btn" href="CHROME_WEB_STORE_URL" target="_blank" rel="noopener">Add to Chrome</a>
+    <a class="btn-sub" href="STRIPE_PAYMENT_LINK" target="_blank" rel="noopener">Buy a license key ($29 / year)</a>
+    LAUNCH-->
+    <p class="note">Checkout is handled by Stripe. Sales tax and VAT are included in the price. Questions: <a href="mailto:yohei.19901031+chatreplycheck@gmail.com" style="color:#fff">yohei.19901031+chatreplycheck@gmail.com</a></p>
+  </section>
+</main>
+<footer>
+  <p>Chat Reply Check is made by Okamoto Tools. Not affiliated with or endorsed by Slack Technologies.</p>
+  <p>© 2026 Okamoto Tools</p>
+</footer>
+</body>
+</html>

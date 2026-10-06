@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ビジネスチャット返信チェック — 送る前に、質問に答えているかを確かめる</title>
+<meta name="description" content="ブラウザ版Slackで送信ボタンを押した瞬間に、相手の質問に答えているかをPCの中のAIが確かめるChrome拡張です。文章は外に出ません。14日間無料、そのあと1年$29。">
+<link rel="stylesheet" href="../_style.css">
+<link rel="alternate" hreflang="en" href="https://getreportzen.com/chatreplycheck/en/">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2CCFGMVL6N"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-2CCFGMVL6N');</script>
+<style>
+  .shot { width: 100%; height: auto; border: 1px solid #e3e5eb; border-radius: 8px; margin: 6px 0 4px; }
+</style>
+</head>
+<body>
+<header class="site">
+  <a class="brand" href="./">ビジネスチャット返信チェック</a>
+  <nav>
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="en/">English</a>
+    <a href="../">ReportZen</a>
+  </nav>
+</header>
+<main>
+  <h1>送る前に、相手の質問に答えているかを確かめる</h1>
+  <p class="lead">ブラウザ版のSlackで使うChrome拡張です。送信ボタンを押した瞬間に、PCの中のAIが直前のやりとりと下書きを読みます。ずれていそうなときだけ止めて、直し案を出します。</p>
+
+  <section class="card">
+    <h2 style="margin-top:0">こういう返事を止めます</h2>
+    <p>「来週の定例、火曜と木曜どっちが都合いいですか？」と聞かれて、「資料は金曜までに用意しておきます！」と返す。急いでいると、聞かれたことと別の話を返してしまいます。相手はもう一度聞き直すことになり、こちらは送ってから気づきます。</p>
+    <img class="shot" src="ja-1.jpg" alt="返事がずれているときに出るパネル。相手が聞いていること、ずれているかもしれない点、直し案が並ぶ" width="1280" height="800" loading="lazy">
+    <p>答えていれば、そのまま送られます。止まるのは、ずれていそうなときだけです。</p>
+    <img class="shot" src="ja-2.jpg" alt="問題がないときは送られて、大丈夫そうですと短く出る" width="1280" height="800" loading="lazy">
+    <p style="font-size:13px;color:#5f6368">画面の指摘の文は見本です。実際の文はAIがその都度書きます。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">送信ボタンを押したときの動き</h2>
+    <table>
+      <tr><th>場面</th><th>動き</th></tr>
+      <tr><td>問題なさそう</td><td>すぐ送られて、「大丈夫そうです」と短く出ます</td></tr>
+      <tr><td>ずれていそう</td><td>送るのを止めてパネルを出します。直し案をコピーする、このまま送る、直す(Esc)から選べます</td></tr>
+      <tr><td>AIの準備ができていない・返事が遅い</td><td>止めずに送ります。チェックのせいで送れない、ということはありません</td></tr>
+    </table>
+    <p>チャンネル、スレッド、DMのどれでも動きます。短いメッセージ(初期値は8文字未満)、自分あてのDM、指定した相手はチェックしません。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">文章はPCの外に出ません</h2>
+    <p>チェックに使うのは、Chromeに入っているAI(Gemini Nano)です。メッセージの文章は、作者のサーバーにも、ほかのどこにも送りません。アカウント登録もありません。購入キーも拡張の中で確かめるので、使っている間の通信はありません。</p>
+    <p>詳しくは<a href="privacy.html">プライバシーポリシー</a>に書いています。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">動くPC</h2>
+    <p>Chromeの内蔵AIは、動くPCが限られます。入れたら、拡張のアイコンから「ためしにチェック」を押して、自分のPCで動くか先に確かめてください。試用の14日間で分かります。</p>
+    <ul>
+      <li>Chrome 138以降。Windows 10/11、macOS 13以降、Linux、Chromebook Plus</li>
+      <li>ディスクの空きが22GB以上(AIの本体は初回にChromeがダウンロードします)</li>
+      <li>ビデオメモリが4GBを超えるGPU、またはメモリ16GB以上かつCPU 4コア以上</li>
+      <li>スマホ・タブレット、Slackのデスクトップアプリでは使えません</li>
+    </ul>
+    <p style="font-size:13px;color:#5f6368">条件はGoogleの<a href="https://developer.chrome.com/docs/ai/prompt-api" target="_blank" rel="noopener">Prompt APIの説明</a>によります。</p>
+  </section>
+
+  <section class="buy" id="buy">
+    <h2>入手する</h2>
+    <p class="price">$29 / 1年 <small>1回払い・自動更新なし</small></p>
+    <ul>
+      <li>まずはChromeウェブストアから入れてください。14日間は無料で、カードの登録も要りません</li>
+      <li>続けて使うときに、下のボタンから1年分の購入キーを買います</li>
+      <li>キーは支払いのすぐ後の画面に出ます。拡張のアイコンを押して「購入キー」に貼り、「登録」を押せば終わりです</li>
+      <li>試用が終わってキーが無いときは、チェックが止まるだけです。送信はいつもどおりできます</li>
+    </ul>
+    <p data-prelaunch style="font-weight:bold">Chromeウェブストアの審査中です。公開されたら、ここから入れられるようになります。</p>
+    <!--LAUNCH
+    <a class="btn" href="CHROME_WEB_STORE_URL" target="_blank" rel="noopener">Chromeウェブストアで入れる</a>
+    <a class="btn-sub" href="STRIPE_PAYMENT_LINK" target="_blank" rel="noopener">購入キーを買う(1年 $29)</a>
+    LAUNCH-->
+    <p class="note">決済はStripeで行います。税は価格に含まれます。お問い合わせは <a href="mailto:yohei.19901031+chatreplycheck@gmail.com" style="color:#fff">yohei.19901031+chatreplycheck@gmail.com</a> まで。</p>
+  </section>
+</main>
+<footer>
+  <p>ビジネスチャット返信チェックは Okamoto Tools が作っているツールのひとつです。Slack Technologies社とは関係ありません。同じ作者が <a href="../">ReportZen</a> と <a href="../sheetpeek/">SheetPeek</a> を作っています。</p>
+  <p>© 2026 Okamoto Tools</p>
+</footer>
+</body>
+</html>
